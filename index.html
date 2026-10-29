@@ -146,74 +146,67 @@
     .pixel-font { font-family: 'VT323', monospace; }
   </style>
 </head>
-<body id="desktopBody" class="wp-teal relative flex flex-col justify-between" oncontextmenu="openDesktopContextMenu(event)">
+<body id="desktopBody" class="wp-teal relative flex flex-col justify-between">
 
   <!-- ================= DESKTOP AREA ================= -->
-  <div id="desktop" class="flex-1 relative w-full h-full overflow-hidden p-3" onclick="onDesktopClick(event)" ondragover="onDesktopDragOver(event)" ondragleave="onDesktopDragLeave(event)" ondrop="onDesktopDrop(event)">
+  <div id="desktop" class="flex-1 relative w-full h-full overflow-hidden p-3" onclick="onDesktopClick(event)">
     
-    <!-- Drag overlay indicator -->
-    <div id="desktopDropZoneGuide" class="hidden absolute inset-2 win-inset bg-blue-500/10 border-4 border-dashed border-white pointer-events-none z-30 flex items-center justify-center">
-      <div class="win-outset bg-[#c0c0c0] p-4 text-black font-mono font-bold text-center shadow-2xl flex flex-col items-center gap-2">
-        <span class="text-4xl animate-bounce">📥</span>
-        <span>RELEASE TO MOUNT FILES DIRECTLY ON DESKTOP</span>
-        <span class="text-[10px] text-gray-600 font-normal">Files will be persistently saved to IndexedDB storage</span>
-      </div>
-    </div>
-
-    <!-- Hidden system file picker for context menu -->
-    <input type="file" id="desktopHiddenFileInput" class="hidden" multiple onchange="handleDirectDesktopFiles(this.files)" />
-
     <!-- DESKTOP ICONS GRID -->
-    <div id="desktopIconsContainer" class="flex flex-col flex-wrap content-start items-start gap-4 h-full w-auto max-w-full z-0 select-none pb-12">
+    <div class="grid grid-flow-col grid-rows-6 gap-y-4 gap-x-2 w-max z-0">
       
-      <!-- System Desktop Icons (Static) -->
-      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40" onclick="openApp('aboutWindow', event)" ondblclick="openApp('aboutWindow', event)">
+      <!-- Icon 1: Portfolio / About -->
+      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded" onclick="openApp('aboutWindow', event)" ondblclick="openApp('aboutWindow', event)">
         <div class="text-3xl filter drop-shadow">👤</div>
         <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight shadow-sm select-none">About_Me.txt</span>
       </div>
 
-      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40" onclick="openApp('projectsWindow', event)" ondblclick="openApp('projectsWindow', event)">
+      <!-- Icon 2: Projects Hub -->
+      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded" onclick="openApp('projectsWindow', event)" ondblclick="openApp('projectsWindow', event)">
         <div class="text-3xl filter drop-shadow">💼</div>
         <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight select-none">Projects</span>
       </div>
 
-      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40" onclick="openApp('cabinetWindow', event)" ondblclick="openApp('cabinetWindow', event)">
+      <!-- Icon 3: File Cabinet / Storage Drop -->
+      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded" onclick="openApp('cabinetWindow', event)" ondblclick="openApp('cabinetWindow', event)">
         <div class="text-3xl filter drop-shadow">🗄️</div>
         <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight select-none">Drop_Disk(C:)</span>
       </div>
 
-      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40" onclick="openApp('calcWindow', event)" ondblclick="openApp('calcWindow', event)">
+      <!-- Icon 4: Calculator -->
+      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded" onclick="openApp('calcWindow', event)" ondblclick="openApp('calcWindow', event)">
         <div class="text-3xl filter drop-shadow">🧮</div>
         <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight select-none">Calc.exe</span>
       </div>
 
-      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40" onclick="openApp('displayWindow', event)" ondblclick="openApp('displayWindow', event)">
+      <!-- Icon 5: Display Properties / Themes -->
+      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded" onclick="openApp('displayWindow', event)" ondblclick="openApp('displayWindow', event)">
         <div class="text-3xl filter drop-shadow">🖥️</div>
         <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight select-none">Display</span>
       </div>
 
-      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40" onclick="openApp('terminalWindow', event)" ondblclick="openApp('terminalWindow', event)">
+      <!-- Icon 6: MS-DOS Terminal -->
+      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded" onclick="openApp('terminalWindow', event)" ondblclick="openApp('terminalWindow', event)">
         <div class="text-3xl filter drop-shadow">📟</div>
         <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight select-none">MS-DOS</span>
       </div>
 
-      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40" onclick="openApp('notepadWindow', event)" ondblclick="openApp('notepadWindow', event)">
+      <!-- Icon 7: Notepad -->
+      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded" onclick="openApp('notepadWindow', event)" ondblclick="openApp('notepadWindow', event)">
         <div class="text-3xl filter drop-shadow">📝</div>
         <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight select-none">Notepad</span>
       </div>
 
-      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40" onclick="openProject('pandas95')" ondblclick="openProject('pandas95')">
+      <!-- Icon 8: Pandas95 Data Inspector -->
+      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded" onclick="openProject('pandas95')" ondblclick="openProject('pandas95')">
         <div class="text-3xl filter drop-shadow">🐍</div>
         <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight select-none">Pandas95</span>
       </div>
 
-      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40" onclick="openProject('arcade')" ondblclick="openProject('arcade')">
+      <!-- Icon 9: Arcade Game -->
+      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded" onclick="openProject('arcade')" ondblclick="openProject('arcade')">
         <div class="text-3xl filter drop-shadow">👾</div>
         <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight select-none">RetroRider</span>
       </div>
-
-      <!-- Container for User Saved & Dropped Persistent Desktop Files -->
-      <div id="userDesktopIcons" class="contents"></div>
 
     </div>
 
@@ -244,8 +237,8 @@
           <div class="flex items-center gap-3 border-b pb-2">
             <div class="w-16 h-16 bg-blue-100 win-inset flex items-center justify-center text-3xl">👨‍💻</div>
             <div>
-              <h2 class="text-sm font-bold text-[#000080]">ALEXANDER "CYBER" DEV</h2>
-              <p class="text-[11px] text-gray-600">Full Stack Systems Engineer & Creative Coder</p>
+              <h2 class="text-sm font-bold text-[#000080]">Prathamesh's Portfolio</h2>
+              <p class="text-[11px] text-gray-600">Data Analyst, AI ML, Creative Coder and more</p>
               <div class="flex gap-1 mt-1 text-[10px]">
                 <span class="bg-yellow-200 px-1 border border-black">OPEN FOR WORK</span>
                 <span class="bg-green-200 px-1 border border-black">REMOTE READY</span>
@@ -256,25 +249,26 @@
           <div>
             <h3 class="font-bold text-[#000080] underline mb-1">BIOGRAPHY:</h3>
             <p class="text-[11px] leading-relaxed">
-              Welcome to my vintage digital portfolio workstation! I build modern web applications, distributed systems, and real-time interactive tools. Obsessed with retro computing, low-level optimization, and clean architectural design.
+              Welcome to the past; here lie all of my projects that you can interact with.
+
             </p>
           </div>
 
           <div>
             <h3 class="font-bold text-[#000080] underline mb-1">TECHNICAL ARSENAL:</h3>
             <div class="grid grid-cols-2 gap-1 text-[11px]">
-              <div>• <b>Languages:</b> Python, TypeScript, C++, Rust, Go</div>
-              <div>• <b>Frontend:</b> React, Vue, Tailwind, WebGL, Three.js</div>
+              <div>• <b>Skills:</b> Python for data analysis and AI ML </div>
+              <div>• <b>Frontend:</b> React, Vue, Tailwind</div>
               <div>• <b>Backend:</b> Node.js, FastAPI, Docker, PostgreSQL</div>
-              <div>• <b>Data:</b> Pandas, NumPy, Redis, GraphQL</div>
+              <div>• <b>Data:</b> Pandas, Excel, Power BI</div>
             </div>
           </div>
 
           <!-- 90s Web Badges -->
           <div class="flex flex-wrap gap-2 pt-2 border-t text-[10px]">
-            <span class="win-outset bg-black text-[#00ff66] px-1 font-bold">MADE WITH 100% NOTEPAD</span>
+            <span class="win-outset bg-black text-[#00ff66] px-1 font-bold">MADE WITH 100% AI</span>
             <span class="win-outset bg-blue-900 text-white px-1 font-bold">HTML 4.0 CERTIFIED</span>
-            <span class="win-outset bg-purple-900 text-white px-1 font-bold">NO COOKIES / PURE FUN</span>
+            <span class="win-outset bg-purple-900 text-white px-1 font-bold">NO COOKIES (Not a sweet tooth person)</span>
           </div>
         </div>
 
@@ -287,8 +281,8 @@
             <button onclick="addGuestbookEntry()" class="win-button text-xs font-bold">Sign</button>
           </div>
           <div id="guestbookList" class="mt-2 win-inset bg-white p-1.5 max-h-24 overflow-y-auto text-[11px] space-y-1">
-            <div><b class="text-blue-800">Morpheus:</b> Welcome to the real world.</div>
-            <div><b class="text-purple-800">Ada Lovelace:</b> Great portfolio! Keep on compiling!</div>
+            <div><b class="text-blue-800">Khatate:</b> Welcome to the real world.</div>
+            <div><b class="text-purple-800">Sameer:</b> Great portfolio!!</div>
           </div>
         </fieldset>
       </div>
@@ -557,115 +551,27 @@
     <!-- 8. WINDOW: NOTEPAD -->
     <div id="notepadWindow" class="retro-window win-outset absolute bg-[#c0c0c0] w-[90%] max-w-lg left-14 top-28 flex flex-col shadow-2xl hidden" style="z-index: 16;">
       <div class="win-titlebar flex items-center justify-between px-2 py-1 cursor-move" onmousedown="startDrag(event, 'notepadWindow')">
-        <div class="flex items-center gap-1 font-bold text-xs truncate">
+        <div class="flex items-center gap-1 font-bold text-xs">
           <span>📝</span>
-          <span id="notepadTitle">Notepad - Untitled</span>
+          <span>Notepad - Untitled</span>
         </div>
         <div class="flex items-center gap-1">
           <button class="win-button text-black text-xs w-4 h-4 font-bold" onclick="closeApp('notepadWindow')">×</button>
         </div>
       </div>
       <div class="bg-[#c0c0c0] border-b border-[#808080] px-2 py-0.5 text-xs flex gap-3 text-black">
-        <span class="hover:bg-[#000080] hover:text-white px-1 cursor-pointer" onclick="saveNotepadFile()"><u>S</u>ave to Desktop</span>
+        <span class="hover:bg-[#000080] hover:text-white px-1 cursor-pointer" onclick="saveNotepadFile()"><u>S</u>ave File</span>
         <span class="hover:bg-[#000080] hover:text-white px-1 cursor-pointer" onclick="clearNotepad()"><u>N</u>ew</span>
-        <span class="hover:bg-[#000080] hover:text-white px-1 cursor-pointer" onclick="downloadCurrentNotepadFile()"><u>D</u>ownload</span>
-        <span class="hover:bg-[#000080] hover:text-white px-1 cursor-pointer" onclick="alertSystem('Notepad 98 with persistent IndexedDB sync.')"><u>A</u>bout</span>
+        <span class="hover:bg-[#000080] hover:text-white px-1 cursor-pointer" onclick="alertSystem('Quick Notepad text editor.')"><u>A</u>bout</span>
       </div>
       <textarea id="notepadText" class="w-full h-56 win-inset p-2 bg-white text-black font-mono text-xs outline-none resize-none" placeholder="Type your ideas, notes, or scratch code here..."></textarea>
       <div class="win-inset bg-[#dfdfdf] px-2 py-0.5 text-[10px] text-gray-700 flex justify-between">
         <span id="notepadCharCount">0 characters</span>
-        <span id="notepadFileStatus">Draft Mode</span>
-      </div>
-    </div>
-
-    <!-- 9. WINDOW: PICTURE VIEWER 98 (For Image Files) -->
-    <div id="imageViewerWindow" class="retro-window win-outset absolute bg-[#c0c0c0] w-[90%] max-w-md left-20 top-20 flex flex-col shadow-2xl hidden" style="z-index: 17;">
-      <div class="win-titlebar flex items-center justify-between px-2 py-1 cursor-move" onmousedown="startDrag(event, 'imageViewerWindow')">
-        <div class="flex items-center gap-1 font-bold text-xs truncate">
-          <span>🖼️</span>
-          <span id="imageViewerTitle">Imaging 98 - Viewer</span>
-        </div>
-        <div class="flex items-center gap-1">
-          <button class="win-button text-black text-xs w-4 h-4 font-bold" onclick="closeApp('imageViewerWindow')">×</button>
-        </div>
-      </div>
-      <div class="bg-[#c0c0c0] border-b border-[#808080] px-2 py-0.5 text-xs flex gap-2 text-black">
-        <button class="win-button text-[10px] py-0 px-2" onclick="zoomImage(1.2)">Zoom +</button>
-        <button class="win-button text-[10px] py-0 px-2" onclick="zoomImage(0.8)">Zoom -</button>
-        <button class="win-button text-[10px] py-0 px-2" onclick="resetImageZoom()">Reset</button>
-        <button class="win-button text-[10px] py-0 px-2 font-bold" onclick="setAsWallpaperFromViewer()">Set as Wallpaper</button>
-      </div>
-      <div class="win-inset bg-black p-2 flex items-center justify-center overflow-auto max-h-72 min-h-[220px]">
-        <img id="imageViewerTarget" src="" class="max-w-full max-h-64 object-contain transition-transform duration-150" alt="Dropped Image" />
-      </div>
-      <div class="win-inset bg-[#dfdfdf] px-2 py-0.5 text-[10px] text-black flex justify-between">
-        <span id="imageViewerStats">0 x 0 px</span>
-        <span>Persisted in IndexedDB</span>
-      </div>
-    </div>
-
-    <!-- 10. WINDOW: MEDIA PLAYER 98 (For Audio Files) -->
-    <div id="mediaPlayerWindow" class="retro-window win-outset absolute bg-[#c0c0c0] w-80 left-28 top-28 flex flex-col shadow-2xl hidden" style="z-index: 18;">
-      <div class="win-titlebar flex items-center justify-between px-2 py-1 cursor-move" onmousedown="startDrag(event, 'mediaPlayerWindow')">
-        <div class="flex items-center gap-1 font-bold text-xs truncate">
-          <span>🎵</span>
-          <span id="mediaPlayerTitle">Media Player 98</span>
-        </div>
-        <div class="flex items-center gap-1">
-          <button class="win-button text-black text-xs w-4 h-4 font-bold" onclick="closeApp('mediaPlayerWindow')">×</button>
-        </div>
-      </div>
-      <div class="p-3 bg-[#c0c0c0] flex flex-col gap-2 font-mono text-xs">
-        <div class="win-inset bg-black p-2 flex flex-col items-center justify-center h-20 text-[#00ff66]">
-          <div id="mediaTrackName" class="text-xs truncate w-full text-center mb-1">Track: None</div>
-          <div class="flex gap-1 items-end h-8 w-44 justify-center" id="retroAudioBars">
-            <div class="w-2 bg-[#00ff66] h-3"></div>
-            <div class="w-2 bg-[#00ff66] h-6"></div>
-            <div class="w-2 bg-[#00ff66] h-4"></div>
-            <div class="w-2 bg-[#00ff66] h-7"></div>
-            <div class="w-2 bg-[#00ff66] h-2"></div>
-            <div class="w-2 bg-[#00ff66] h-5"></div>
-          </div>
-        </div>
-        <audio id="desktopAudioPlayer" controls class="w-full mt-1"></audio>
+        <span>UTF-8</span>
       </div>
     </div>
 
   </div> <!-- END DESKTOP -->
-
-  <!-- ================= 90s DESKTOP RIGHT-CLICK CONTEXT MENU ================= -->
-  <div id="desktopContextMenu" class="win-outset absolute bg-[#c0c0c0] py-1 px-0.5 w-48 shadow-2xl z-50 font-mono text-xs hidden text-black" onclick="event.stopPropagation()">
-    <div onclick="createNewTextDocOnDesktop(); closeContextMenu();" class="flex items-center gap-2 px-3 py-1 hover:bg-[#000080] hover:text-white cursor-pointer">
-      <span>📄</span><span>New Text Document</span>
-    </div>
-    <div onclick="triggerDesktopUpload(); closeContextMenu();" class="flex items-center gap-2 px-3 py-1 hover:bg-[#000080] hover:text-white cursor-pointer">
-      <span>📥</span><span>Import File...</span>
-    </div>
-    <hr class="border-t border-[#808080] my-1">
-    <div onclick="rearrangeDesktopIcons(); closeContextMenu();" class="flex items-center gap-2 px-3 py-1 hover:bg-[#000080] hover:text-white cursor-pointer">
-      <span>📐</span><span>Arrange Icons</span>
-    </div>
-    <div onclick="openApp('displayWindow'); closeContextMenu();" class="flex items-center gap-2 px-3 py-1 hover:bg-[#000080] hover:text-white cursor-pointer">
-      <span>🖥️</span><span>Properties</span>
-    </div>
-  </div>
-
-  <!-- ICON CONTEXT MENU -->
-  <div id="iconContextMenu" class="win-outset absolute bg-[#c0c0c0] py-1 px-0.5 w-44 shadow-2xl z-50 font-mono text-xs hidden text-black" onclick="event.stopPropagation()">
-    <div id="iconCtxOpen" class="flex items-center gap-2 px-3 py-1 hover:bg-[#000080] hover:text-white cursor-pointer font-bold">
-      <span>⚡</span><span>Open</span>
-    </div>
-    <div id="iconCtxRename" class="flex items-center gap-2 px-3 py-1 hover:bg-[#000080] hover:text-white cursor-pointer">
-      <span>✏️</span><span>Rename</span>
-    </div>
-    <div id="iconCtxDownload" class="flex items-center gap-2 px-3 py-1 hover:bg-[#000080] hover:text-white cursor-pointer">
-      <span>💾</span><span>Download</span>
-    </div>
-    <hr class="border-t border-[#808080] my-1">
-    <div id="iconCtxDelete" class="flex items-center gap-2 px-3 py-1 hover:bg-[#000080] hover:text-white cursor-pointer text-red-900 font-bold">
-      <span>🗑️</span><span>Delete File</span>
-    </div>
-  </div>
 
   <!-- ================= START MENU ================= -->
   <div id="startMenu" class="win-outset absolute bottom-10 left-1 w-56 bg-[#c0c0c0] p-1 flex shadow-2xl z-50 hidden">
@@ -723,7 +629,6 @@
 
     <!-- Right: System Tray -->
     <div class="win-inset px-2 py-0.5 flex items-center gap-2 text-xs font-mono bg-[#dfdfdf] shrink-0">
-      <span class="text-[10px] text-green-800 font-bold hidden sm:inline" title="Browser Storage Active">💾 IndexedDB</span>
       <span id="soundToggleBtn" onclick="toggleAudio()" class="cursor-pointer" title="Toggle 90s Sound Effects">🔊</span>
       <span onclick="toggleCrtScanlines()" class="cursor-pointer" title="Toggle CRT Filter">📺</span>
       <span id="trayClock">12:00 PM</span>
@@ -749,97 +654,14 @@
 
   <!-- ================= JAVASCRIPT SYSTEM ENGINE ================= -->
   <script>
-    // System State & Persistence
+    // System State
     let highestZ = 30;
     let audioEnabled = true;
     let crtEnabled = false;
     let audioCtx = null;
-    let currentEditingFileId = null;
-    let selectedIconTarget = null;
-    let currentImageScale = 1;
-
     let virtualFiles = [
       { name: "Readme.txt", size: "1.2 KB", type: "text/plain", content: "Welcome to RetroOS 98.\nDouble-click any project to explore its interactive sub-world!\nDrop your files to test storage." }
     ];
-
-    // ================= INDEXED-DB PERSISTENCE LAYER =================
-    const DB_NAME = "RetroOS98_DB";
-    const DB_VERSION = 1;
-    const STORE_FILES = "desktop_files";
-    const STORE_SETTINGS = "system_settings";
-    let dbInstance = null;
-
-    function initDatabase() {
-      return new Promise((resolve, reject) => {
-        const req = indexedDB.open(DB_NAME, DB_VERSION);
-        req.onupgradeneeded = (e) => {
-          const db = e.target.result;
-          if (!db.objectStoreNames.contains(STORE_FILES)) {
-            db.createObjectStore(STORE_FILES, { keyPath: "id" });
-          }
-          if (!db.objectStoreNames.contains(STORE_SETTINGS)) {
-            db.createObjectStore(STORE_SETTINGS, { keyPath: "key" });
-          }
-        };
-        req.onsuccess = (e) => {
-          dbInstance = e.target.result;
-          resolve(dbInstance);
-        };
-        req.onerror = (e) => {
-          console.error("IndexedDB error:", e);
-          reject(e);
-        };
-      });
-    }
-
-    async function dbSaveFile(fileObj) {
-      if (!dbInstance) await initDatabase();
-      return new Promise((resolve, reject) => {
-        const tx = dbInstance.transaction(STORE_FILES, "readwrite");
-        const store = tx.objectStore(STORE_FILES);
-        store.put(fileObj);
-        tx.oncomplete = () => resolve(fileObj);
-        tx.onerror = (e) => reject(e);
-      });
-    }
-
-    async function dbGetAllFiles() {
-      if (!dbInstance) await initDatabase();
-      return new Promise((resolve, reject) => {
-        const tx = dbInstance.transaction(STORE_FILES, "readonly");
-        const store = tx.objectStore(STORE_FILES);
-        const req = store.getAll();
-        req.onsuccess = () => resolve(req.result || []);
-        req.onerror = (e) => reject(e);
-      });
-    }
-
-    async function dbDeleteFile(id) {
-      if (!dbInstance) await initDatabase();
-      return new Promise((resolve, reject) => {
-        const tx = dbInstance.transaction(STORE_FILES, "readwrite");
-        const store = tx.objectStore(STORE_FILES);
-        store.delete(id);
-        tx.oncomplete = () => resolve();
-        tx.onerror = (e) => reject(e);
-      });
-    }
-
-    async function dbSaveSetting(key, value) {
-      if (!dbInstance) await initDatabase();
-      const tx = dbInstance.transaction(STORE_SETTINGS, "readwrite");
-      tx.objectStore(STORE_SETTINGS).put({ key, value });
-    }
-
-    async function dbGetSetting(key) {
-      if (!dbInstance) await initDatabase();
-      return new Promise((resolve) => {
-        const tx = dbInstance.transaction(STORE_SETTINGS, "readonly");
-        const req = tx.objectStore(STORE_SETTINGS).get(key);
-        req.onsuccess = () => resolve(req.result ? req.result.value : null);
-        req.onerror = () => resolve(null);
-      });
-    }
 
     // Sound Synthesizer via Web Audio API
     function getAudioCtx() {
@@ -917,7 +739,6 @@
     }
 
     function onDesktopClick(e) {
-      closeContextMenu();
       if (!e.target.closest('#startMenu') && !e.target.closest('#startBtn')) {
         closeStartMenu();
       }
@@ -932,329 +753,598 @@
       document.getElementById("sysAlertModal").classList.remove("hidden");
     }
 
-    // ================= DIRECT DESKTOP DRAG & DROP =================
-    function onDesktopDragOver(e) {
-      e.preventDefault();
-      document.getElementById("desktopDropZoneGuide").classList.remove("hidden");
+    // ================= WINDOW MANAGER =================
+    const activeWindows = new Set(['aboutWindow']);
+
+    function bringToFront(winId) {
+      const win = document.getElementById(winId);
+      if (!win) return;
+      highestZ += 1;
+      win.style.zIndex = highestZ;
+
+      // Update titlebars
+      document.querySelectorAll('.win-titlebar').forEach(tb => tb.classList.add('inactive'));
+      const activeBar = win.querySelector('.win-titlebar');
+      if (activeBar) activeBar.classList.remove('inactive');
+
+      updateTaskbar();
     }
 
-    function onDesktopDragLeave(e) {
-      if (e.relatedTarget === null || e.clientX <= 0 || e.clientY <= 0) {
-        document.getElementById("desktopDropZoneGuide").classList.add("hidden");
-      }
+    function openApp(winId, event) {
+      if (event) event.stopPropagation();
+      beep(700, 40);
+      const win = document.getElementById(winId);
+      if (!win) return;
+      win.classList.remove("hidden");
+      activeWindows.add(winId);
+      bringToFront(winId);
     }
 
-    function onDesktopDrop(e) {
-      e.preventDefault();
-      document.getElementById("desktopDropZoneGuide").classList.add("hidden");
-      if (e.dataTransfer && e.dataTransfer.files.length > 0) {
-        handleDirectDesktopFiles(e.dataTransfer.files);
-      }
+    function closeApp(winId) {
+      beep(350, 40);
+      const win = document.getElementById(winId);
+      if (win) win.classList.add("hidden");
+      activeWindows.delete(winId);
+      updateTaskbar();
     }
 
-    function triggerDesktopUpload() {
-      document.getElementById("desktopHiddenFileInput").click();
+    function minimizeApp(winId) {
+      beep(450, 30);
+      const win = document.getElementById(winId);
+      if (win) win.classList.add("hidden");
+      updateTaskbar();
     }
 
-    async function handleDirectDesktopFiles(files) {
-      beep(850, 50);
-      for (const file of Array.from(files)) {
-        await processAndMountFile(file);
-      }
-      beep(1000, 40);
-    }
-
-    function getFileIconAndCategory(filename, mimeType) {
-      const ext = filename.split('.').pop().toLowerCase();
-      if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'].includes(ext) || mimeType.startsWith('image/')) {
-        return { icon: "🖼️", cat: "image" };
-      }
-      if (['mp3', 'wav', 'ogg', 'm4a'].includes(ext) || mimeType.startsWith('audio/')) {
-        return { icon: "🎵", cat: "audio" };
-      }
-      if (['csv', 'tsv'].includes(ext)) {
-        return { icon: "📊", cat: "data" };
-      }
-      if (['py'].includes(ext)) {
-        return { icon: "🐍", cat: "python" };
-      }
-      if (['js', 'ts', 'jsx', 'tsx', 'html', 'css', 'json'].includes(ext)) {
-        return { icon: "📜", cat: "code" };
-      }
-      if (['txt', 'md', 'log', 'ini'].includes(ext)) {
-        return { icon: "📝", cat: "text" };
-      }
-      if (['pdf'].includes(ext)) {
-        return { icon: "📕", cat: "document" };
-      }
-      return { icon: "📁", cat: "binary" };
-    }
-
-    function readFileAsDataURL(file) {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.readAsDataURL(file);
-      });
-    }
-
-    function readFileAsText(file) {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.readAsText(file);
-      });
-    }
-
-    async function processAndMountFile(file) {
-      const { icon, cat } = getFileIconAndCategory(file.name, file.type);
-      let contentData = null;
-
-      if (cat === 'image' || cat === 'audio' || cat === 'binary' || cat === 'document') {
-        contentData = await readFileAsDataURL(file);
+    function toggleMaximize(winId) {
+      beep(600, 30);
+      const win = document.getElementById(winId);
+      if (!win) return;
+      if (win.dataset.maximized === "true") {
+        win.style.width = win.dataset.origW;
+        win.style.height = win.dataset.origH;
+        win.style.left = win.dataset.origL;
+        win.style.top = win.dataset.origT;
+        win.dataset.maximized = "false";
       } else {
-        contentData = await readFileAsText(file);
+        win.dataset.origW = win.style.width || "600px";
+        win.dataset.origH = win.style.height || "auto";
+        win.dataset.origL = win.style.left || "40px";
+        win.dataset.origT = win.style.top || "40px";
+        win.style.width = "99%";
+        win.style.height = "calc(100vh - 48px)";
+        win.style.left = "0.5%";
+        win.style.top = "4px";
+        win.dataset.maximized = "true";
       }
-
-      const fileRecord = {
-        id: "file_" + Date.now() + "_" + Math.floor(Math.random() * 1000),
-        name: file.name,
-        size: `${(file.size / 1024).toFixed(1)} KB`,
-        rawSize: file.size,
-        type: file.type || "text/plain",
-        category: cat,
-        icon: icon,
-        content: contentData,
-        timestamp: Date.now()
-      };
-
-      await dbSaveFile(fileRecord);
-      renderUserDesktopIcons();
-      // Mirror to cabinet
-      virtualFiles.push(fileRecord);
-      renderVirtualFiles();
     }
 
-    async function renderUserDesktopIcons() {
-      const files = await dbGetAllFiles();
-      const container = document.getElementById("userDesktopIcons");
+    function updateTaskbar() {
+      const container = document.getElementById("taskbarTabs");
       container.innerHTML = "";
 
-      files.forEach(f => {
-        const iconDiv = document.createElement("div");
-        iconDiv.className = "desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40 relative";
-        iconDiv.dataset.fileId = f.id;
-        iconDiv.innerHTML = `
-          <div class="text-3xl filter drop-shadow">${f.icon}</div>
-          <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight shadow-sm select-none break-all line-clamp-2">${escapeHtml(f.name)}</span>
-        `;
-        iconDiv.onclick = (e) => {
-          e.stopPropagation();
-          beep(600, 20);
+      const titles = {
+        aboutWindow: { name: "About_Me.txt", icon: "👤" },
+        projectsWindow: { name: "Projects", icon: "💼" },
+        projectHostWindow: { name: "Sub-Project", icon: "🚀" },
+        cabinetWindow: { name: "Drop_Disk(C:)", icon: "🗄️" },
+        calcWindow: { name: "Calculator", icon: "🧮" },
+        displayWindow: { name: "Display", icon: "🖥️" },
+        terminalWindow: { name: "MS-DOS", icon: "📟" },
+        notepadWindow: { name: "Notepad", icon: "📝" }
+      };
+
+      activeWindows.forEach(id => {
+        const info = titles[id] || { name: id, icon: "📁" };
+        const win = document.getElementById(id);
+        const isHidden = win.classList.contains("hidden");
+
+        const btn = document.createElement("button");
+        btn.className = `win-button text-xs font-bold px-2 py-0.5 flex items-center gap-1 max-w-[130px] truncate ${!isHidden ? 'active bg-[#dfdfdf]' : ''}`;
+        btn.innerHTML = `<span>${info.icon}</span><span class="truncate">${info.name}</span>`;
+        btn.onclick = () => {
+          if (isHidden) {
+            win.classList.remove("hidden");
+            bringToFront(id);
+          } else {
+            minimizeApp(id);
+          }
         };
-        iconDiv.ondblclick = (e) => {
-          e.stopPropagation();
-          openDesktopUserFile(f.id);
-        };
-        iconDiv.oncontextmenu = (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          openIconContextMenu(e, f.id);
-        };
-        container.appendChild(iconDiv);
+        container.appendChild(btn);
       });
     }
 
-    async function openDesktopUserFile(id) {
-      const files = await dbGetAllFiles();
-      const file = files.find(f => f.id === id);
-      if (!file) return;
+    // Draggable Windows Logic
+    let dragTarget = null;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
 
-      beep(700, 40);
-
-      if (file.category === 'image') {
-        const win = document.getElementById("imageViewerWindow");
-        document.getElementById("imageViewerTitle").textContent = `Imaging 98 - ${file.name}`;
-        const img = document.getElementById("imageViewerTarget");
-        img.src = file.content;
-        currentImageScale = 1;
-        img.style.transform = `scale(1)`;
-        img.onload = () => {
-          document.getElementById("imageViewerStats").textContent = `${img.naturalWidth} x ${img.naturalHeight} px (${file.size})`;
-        };
-        win.dataset.currentFileUrl = file.content;
-        openApp("imageViewerWindow");
-      } 
-      else if (file.category === 'audio') {
-        const win = document.getElementById("mediaPlayerWindow");
-        document.getElementById("mediaPlayerTitle").textContent = `Media Player - ${file.name}`;
-        document.getElementById("mediaTrackName").textContent = `Track: ${file.name}`;
-        const player = document.getElementById("desktopAudioPlayer");
-        player.src = file.content;
-        openApp("mediaPlayerWindow");
-        player.play().catch(() => {});
-      }
-      else if (file.category === 'data') {
-        openProject('pandas95');
-        setTimeout(() => {
-          const con = document.getElementById("pandasDemoConsole");
-          if (con) {
-            con.innerHTML += `
-              <div class="text-yellow-300 mt-2">&gt; Loaded dropped file: '${file.name}'</div>
-              <div>Detected CSV/Data Matrix | Size: ${file.size}</div>
-              <div>Executing pd.read_csv() summary breakdown...</div>
-              <div class="text-white mt-1 win-inset bg-gray-900 p-1 text-[10px] max-h-24 overflow-auto">${escapeHtml(file.content.slice(0, 300))}...</div>
-            `;
-            con.scrollTop = con.scrollHeight;
-          }
-        }, 150);
-      }
-      else {
-        // Text, Code, Python, Markdown
-        currentEditingFileId = file.id;
-        document.getElementById("notepadTitle").textContent = `Notepad - ${file.name}`;
-        document.getElementById("notepadText").value = file.content || "";
-        document.getElementById("notepadCharCount").textContent = `${file.content.length} characters`;
-        document.getElementById("notepadFileStatus").textContent = `Editing: ${file.name}`;
-        openApp("notepadWindow");
-      }
-    }
-
-    // ================= CONTEXT MENUS (DESKTOP & ICONS) =================
-    function openDesktopContextMenu(e) {
-      if (e.target.closest('#desktopContextMenu') || e.target.closest('#iconContextMenu') || e.target.closest('.retro-window') || e.target.closest('#startMenu')) {
+    function startDrag(e, winId) {
+      bringToFront(winId);
+      dragTarget = document.getElementById(winId);
+      if (!dragTarget || dragTarget.dataset.maximized === "true") {
+        dragTarget = null;
         return;
       }
+      const rect = dragTarget.getBoundingClientRect();
+      dragOffsetX = e.clientX - rect.left;
+      dragOffsetY = e.clientY - rect.top;
+
+      window.addEventListener('mousemove', onDragMove);
+      window.addEventListener('mouseup', onDragEnd);
+    }
+
+    function onDragMove(e) {
+      if (!dragTarget) return;
       e.preventDefault();
-      beep(600, 30);
-      closeContextMenu();
-
-      const menu = document.getElementById("desktopContextMenu");
-      const x = Math.min(window.innerWidth - 190, e.clientX);
-      const y = Math.min(window.innerHeight - 150, e.clientY);
-      menu.style.left = `${x}px`;
-      menu.style.top = `${y}px`;
-      menu.classList.remove("hidden");
+      const x = Math.max(0, Math.min(window.innerWidth - 60, e.clientX - dragOffsetX));
+      const y = Math.max(0, Math.min(window.innerHeight - 80, e.clientY - dragOffsetY));
+      dragTarget.style.left = `${x}px`;
+      dragTarget.style.top = `${y}px`;
     }
 
-    function openIconContextMenu(e, fileId) {
-      closeContextMenu();
-      selectedIconTarget = fileId;
-      const menu = document.getElementById("iconContextMenu");
-      const x = Math.min(window.innerWidth - 180, e.clientX);
-      const y = Math.min(window.innerHeight - 150, e.clientY);
-      menu.style.left = `${x}px`;
-      menu.style.top = `${y}px`;
-      menu.classList.remove("hidden");
-
-      document.getElementById("iconCtxOpen").onclick = () => {
-        closeContextMenu();
-        openDesktopUserFile(fileId);
-      };
-      document.getElementById("iconCtxRename").onclick = () => {
-        closeContextMenu();
-        renameDesktopFile(fileId);
-      };
-      document.getElementById("iconCtxDownload").onclick = () => {
-        closeContextMenu();
-        downloadDesktopFile(fileId);
-      };
-      document.getElementById("iconCtxDelete").onclick = () => {
-        closeContextMenu();
-        deleteDesktopFile(fileId);
-      };
+    function onDragEnd() {
+      dragTarget = null;
+      window.removeEventListener('mousemove', onDragMove);
+      window.removeEventListener('mouseup', onDragEnd);
     }
 
-    function closeContextMenu() {
-      document.getElementById("desktopContextMenu").classList.add("hidden");
-      document.getElementById("iconContextMenu").classList.add("hidden");
-    }
+    // ================= DYNAMIC PROJECTS HOSTING =================
+    // Each project boots into a totally bespoke UI environment!
+    function openProject(projKey) {
+      beep(900, 50);
+      const host = document.getElementById("projectHostWindow");
+      const title = document.getElementById("projectHostTitle");
+      const icon = document.getElementById("projectHostIcon");
+      const body = document.getElementById("projectHostBody");
 
-    async function createNewTextDocOnDesktop() {
-      beep(700, 40);
-      const files = await dbGetAllFiles();
-      const num = files.length + 1;
-      const newFile = {
-        id: "file_" + Date.now(),
-        name: `New_Document_${num}.txt`,
-        size: "0.1 KB",
-        rawSize: 10,
-        type: "text/plain",
-        category: "text",
-        icon: "📝",
-        content: "New Text Document Created on Desktop.\nType here and click Save!",
-        timestamp: Date.now()
-      };
-      await dbSaveFile(newFile);
-      renderUserDesktopIcons();
-      openDesktopUserFile(newFile.id);
-    }
+      host.classList.remove("hidden");
+      activeWindows.add('projectHostWindow');
+      bringToFront('projectHostWindow');
 
-    async function renameDesktopFile(id) {
-      const files = await dbGetAllFiles();
-      const file = files.find(f => f.id === id);
-      if (!file) return;
-
-      const newName = prompt("Enter new filename:", file.name);
-      if (newName && newName.trim() !== "") {
-        file.name = newName.trim();
-        const info = getFileIconAndCategory(file.name, file.type);
-        file.icon = info.icon;
-        file.category = info.cat;
-        await dbSaveFile(file);
-        renderUserDesktopIcons();
-        beep(750, 40);
+      if (projKey === 'pandas95') {
+        icon.textContent = "🐍";
+        title.textContent = "Pandas95 - Python WASM Data Inspector Sub-System";
+        body.innerHTML = `
+          <div class="bg-[#c0c0c0] text-black win-inset p-3 flex-1 flex flex-col font-mono text-xs">
+            <div class="win-titlebar px-2 py-0.5 text-white font-bold flex justify-between mb-2">
+              <span>Pandas Workstation 3.2</span>
+              <span>Python 3.11 WASM</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 flex-1">
+              <div class="win-inset bg-white p-3 flex flex-col items-center justify-center border-dashed border-2 border-gray-400">
+                <div class="text-3xl mb-1">💾</div>
+                <div class="font-bold text-center">Fast In-Memory Dataframe</div>
+                <p class="text-[10px] text-gray-600 text-center">Compute min, max, avg, nulls & distribution curves</p>
+                <button onclick="loadSamplePandas()" class="win-button mt-2 text-xs font-bold">⚡ Load Telecom_Data.csv</button>
+              </div>
+              <div class="win-inset bg-black text-[#00ff66] p-2 overflow-auto font-mono text-[11px]" id="pandasDemoConsole">
+                <div>[SYSTEM] In-Memory Python Engine Mounted.</div>
+                <div>&gt; import pandas as pd</div>
+                <div>&gt; df = pd.DataFrame(data)</div>
+                <div>Ready for exploratory data analysis...</div>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (projKey === 'arcade') {
+        icon.textContent = "🏍️";
+        title.textContent = "RetroRider 1995 - 8-Bit Canvas Highway";
+        body.innerHTML = `
+          <div class="flex-1 flex flex-col items-center justify-center bg-gray-900 p-2 relative">
+            <div class="text-xs font-mono text-yellow-400 mb-1 flex justify-between w-full max-w-md px-2">
+              <span>SCORE: <span id="gameScore">0</span></span>
+              <span>USE [LEFT] / [RIGHT] ARROWS TO STEER</span>
+            </div>
+            <canvas id="arcadeCanvas" width="400" height="260" class="win-inset bg-black shadow-lg"></canvas>
+            <div class="mt-2 flex gap-2">
+              <button onclick="steerBike(-1)" class="win-button text-xs px-3">◀ Left</button>
+              <button onclick="startArcadeGame()" class="win-button text-xs font-bold text-green-800 px-4">START RACE</button>
+              <button onclick="steerBike(1)" class="win-button text-xs px-3">Right ▶</button>
+            </div>
+          </div>
+        `;
+        setTimeout(initArcadeGame, 100);
+      } else if (projKey === 'cyberpunk') {
+        icon.textContent = "⚡";
+        title.textContent = "CyberCity Matrix Terminal - Netrunner CLI";
+        body.innerHTML = `
+          <div class="flex-1 bg-black p-3 font-mono text-xs text-[#00ffcc] flex flex-col justify-between">
+            <div class="space-y-1 overflow-y-auto max-h-72" id="cyberOutput">
+              <div class="text-pink-500 font-bold">CYBERNET CORP ICE BREAKER v2.077</div>
+              <div>Bypassing node security protocols... [OK]</div>
+              <div>Pinging neural mainframe @ 192.168.0.254 ... 2ms</div>
+              <div class="text-yellow-300">&gt; Encryption key cracked: 0x9AF4B7E</div>
+            </div>
+            <div class="mt-2 pt-2 border-t border-[#00ffcc]/30 flex items-center gap-2">
+              <span class="text-pink-500 font-bold">&gt;&gt;</span>
+              <input type="text" id="cyberInput" placeholder="type 'hack', 'matrix', or 'disconnect'..." class="bg-black text-[#00ffcc] border-none outline-none flex-1 font-mono text-xs" onkeydown="handleCyberCommand(event)" />
+            </div>
+          </div>
+        `;
+      } else if (projKey === 'vaporwave') {
+        icon.textContent = "🌴";
+        title.textContent = "VaporWave Horizon - WebGL Synth Aesthetic";
+        body.innerHTML = `
+          <div class="flex-1 flex flex-col items-center justify-center p-3 relative overflow-hidden" style="background: linear-gradient(180deg, #18002e 0%, #ff007f 70%, #ffb6c1 100%);">
+            <div class="w-32 h-32 rounded-full bg-gradient-to-t from-yellow-300 to-pink-500 shadow-2xl mb-2 flex items-center justify-center font-bold text-black text-xs font-mono">
+              RETRO SUN
+            </div>
+            <div class="w-full h-24 border-t-2 border-cyan-300 flex flex-col justify-around opacity-75" style="background: repeating-linear-gradient(0deg, rgba(0,255,255,0.2), rgba(0,255,255,0.2) 2px, transparent 2px, transparent 14px);">
+              <div class="text-center font-mono text-xs text-cyan-200 tracking-widest uppercase">♪ CHILLWAVE SYNTHWAVE HORIZON 1984 ♪</div>
+            </div>
+            <button onclick="beep(440, 300, 'sine'); beep(554, 300, 'sine');" class="win-button mt-2 text-xs font-bold bg-[#c0c0c0] text-black">
+              🎹 Play Synthesizer Chord
+            </button>
+          </div>
+        `;
       }
     }
 
-    async function downloadDesktopFile(id) {
-      const files = await dbGetAllFiles();
-      const file = files.find(f => f.id === id);
-      if (!file) return;
-
-      beep(600, 40);
-      const a = document.createElement("a");
-      a.href = file.content.startsWith('data:') ? file.content : 'data:text/plain;charset=utf-8,' + encodeURIComponent(file.content);
-      a.download = file.name;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+    // Mini Demo Data for Pandas95 project simulation
+    function loadSamplePandas() {
+      beep(800, 60);
+      const con = document.getElementById("pandasDemoConsole");
+      con.innerHTML += `
+        <div class="text-yellow-300 mt-2">&gt; df.describe() generated:</div>
+        <div>Rows: 1,420 | Columns: 6</div>
+        <div>Revenue - Mean: $4,210.50 | Std: 312.4 | Min: $120.0 | Max: $9,800.0</div>
+        <div>Latency - Mean: 24.3ms | 50% Med: 21.0ms | 99th: 88.4ms</div>
+        <div class="text-cyan-300">Distribution analysis compiled successfully.</div>
+      `;
+      con.scrollTop = con.scrollHeight;
     }
 
-    async function deleteDesktopFile(id) {
-      beep(300, 100);
-      await dbDeleteFile(id);
-      renderUserDesktopIcons();
-      alertSystem("File permanently deleted from desktop virtual disk.", "Recycle Bin", "🗑️");
+    // Mini Arcade Game Logic
+    let gameLoopId = null;
+    let bikeX = 200;
+    let obstacles = [];
+    let score = 0;
+    let gameActive = false;
+
+    function initArcadeGame() {
+      const canvas = document.getElementById("arcadeCanvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#000";
+      ctx.fillRect(0, 0, 400, 260);
+      ctx.fillStyle = "#fff";
+      ctx.font = "12px monospace";
+      ctx.fillText("Press 'START RACE' to ride!", 120, 130);
     }
 
-    function rearrangeDesktopIcons() {
-      beep(650, 40);
-      renderUserDesktopIcons();
+    function startArcadeGame() {
+      beep(600, 80);
+      gameActive = true;
+      score = 0;
+      bikeX = 200;
+      obstacles = [
+        { x: 160, y: 0, speed: 3 },
+        { x: 240, y: -100, speed: 4 }
+      ];
+      if (gameLoopId) cancelAnimationFrame(gameLoopId);
+      runArcadeLoop();
     }
 
-    // Image Viewer tools
-    function zoomImage(factor) {
-      currentImageScale *= factor;
-      const img = document.getElementById("imageViewerTarget");
-      img.style.transform = `scale(${currentImageScale})`;
+    function steerBike(dir) {
+      if (!gameActive) return;
+      bikeX = Math.max(120, Math.min(280, bikeX + dir * 25));
+      beep(300, 20);
     }
 
-    function resetImageZoom() {
-      currentImageScale = 1;
-      document.getElementById("imageViewerTarget").style.transform = `scale(1)`;
-    }
+    window.addEventListener('keydown', (e) => {
+      if (e.key === "ArrowLeft") steerBike(-1);
+      if (e.key === "ArrowRight") steerBike(1);
+    });
 
-    function setAsWallpaperFromViewer() {
-      const win = document.getElementById("imageViewerWindow");
-      const url = win.dataset.currentFileUrl;
-      if (url) {
-        setCustomWallpaperDirect(url);
-        alertSystem("Desktop wallpaper updated with current image!", "Display", "🖥️");
+    function runArcadeLoop() {
+      const canvas = document.getElementById("arcadeCanvas");
+      if (!canvas || !gameActive) return;
+      const ctx = canvas.getContext("2d");
+
+      // Road drawing
+      ctx.fillStyle = "#222";
+      ctx.fillRect(0, 0, 400, 260);
+
+      // Grass
+      ctx.fillStyle = "#006400";
+      ctx.fillRect(0, 0, 100, 260);
+      ctx.fillRect(300, 0, 100, 260);
+
+      // Highway Lanes
+      ctx.strokeStyle = "#fff";
+      ctx.setLineDash([10, 10]);
+      ctx.beginPath();
+      ctx.moveTo(200, 0);
+      ctx.lineTo(200, 260);
+      ctx.stroke();
+
+      // Update & Draw Obstacles
+      ctx.fillStyle = "#ff0055";
+      obstacles.forEach(obs => {
+        obs.y += obs.speed;
+        ctx.fillRect(obs.x - 10, obs.y, 20, 30);
+        if (obs.y > 260) {
+          obs.y = -20;
+          obs.x = 120 + Math.random() * 160;
+          score += 10;
+          document.getElementById("gameScore").textContent = score;
+        }
+
+        // Collision check
+        if (Math.abs(bikeX - obs.x) < 20 && Math.abs(220 - obs.y) < 25) {
+          gameActive = false;
+          beep(150, 400, "sawtooth");
+          ctx.fillStyle = "#ffff00";
+          ctx.font = "bold 18px monospace";
+          ctx.fillText("CRASH! GAME OVER", 110, 130);
+        }
+      });
+
+      // Player Bike
+      if (gameActive) {
+        ctx.fillStyle = "#00ffcc";
+        ctx.fillRect(bikeX - 10, 210, 20, 35);
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(bikeX - 5, 205, 10, 8); // helmet
+        gameLoopId = requestAnimationFrame(runArcadeLoop);
       }
     }
 
-    // ================= NOTEPAD LOGIC (UPDATED WITH IDB SYNC) =================
+    function handleCyberCommand(e) {
+      if (e.key === 'Enter') {
+        const val = e.target.value.trim().toLowerCase();
+        const out = document.getElementById("cyberOutput");
+        beep(750, 30);
+        out.innerHTML += `<div class="text-white">&gt; ${e.target.value}</div>`;
+        if (val === 'hack') {
+          out.innerHTML += `<div class="text-green-400">INFILTRATING SATELLITE SUBNET... 100% COMPLETE. ACCESS GRANTED.</div>`;
+        } else if (val === 'matrix') {
+          out.innerHTML += `<div class="text-yellow-400">01001000 01000001 01000011 01001011 01010011</div>`;
+        } else if (val === 'disconnect') {
+          out.innerHTML += `<div class="text-red-400">NEURAL LINK SEVERED.</div>`;
+        } else {
+          out.innerHTML += `<div class="text-gray-400">Command not recognized. Try 'hack', 'matrix', or 'disconnect'</div>`;
+        }
+        e.target.value = '';
+        out.scrollTop = out.scrollHeight;
+      }
+    }
+
+    // ================= FILE CABINET & DRAG AND DROP STORAGE =================
+    const cabinetDropZone = document.getElementById("cabinetDropZone");
+
+    ['dragenter', 'dragover'].forEach(name => {
+      cabinetDropZone.addEventListener(name, (e) => {
+        e.preventDefault();
+        cabinetDropZone.classList.add("bg-yellow-100");
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(name => {
+      cabinetDropZone.addEventListener(name, (e) => {
+        e.preventDefault();
+        cabinetDropZone.classList.remove("bg-yellow-100");
+      });
+    });
+
+    cabinetDropZone.addEventListener('drop', (e) => {
+      if (e.dataTransfer.files.length) {
+        handleCabinetFiles(e.dataTransfer.files);
+      }
+    });
+
+    function handleCabinetFiles(files) {
+      beep(600, 60);
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        const isImg = file.type.startsWith('image/');
+
+        reader.onload = function(evt) {
+          virtualFiles.push({
+            name: file.name,
+            size: `${(file.size / 1024).toFixed(1)} KB`,
+            type: file.type || "binary/unknown",
+            content: evt.target.result,
+            isImage: isImg
+          });
+          renderVirtualFiles();
+        };
+
+        if (isImg) {
+          reader.readAsDataURL(file);
+        } else {
+          reader.readAsText(file);
+        }
+      });
+    }
+
+    function renderVirtualFiles() {
+      const list = document.getElementById("virtualFileList");
+      list.innerHTML = "";
+      if (virtualFiles.length === 0) {
+        list.innerHTML = `<div class="text-gray-400 italic text-[11px] p-2 text-center">Disk drive empty. Drop files above to save!</div>`;
+        return;
+      }
+
+      virtualFiles.forEach((file, idx) => {
+        const item = document.createElement("div");
+        item.className = "flex items-center justify-between p-1.5 hover:bg-blue-50 border-b border-gray-200 cursor-pointer text-black text-[11px]";
+        item.innerHTML = `
+          <div class="flex items-center gap-1.5 truncate">
+            <span>${file.isImage ? '🖼️' : '📄'}</span>
+            <span class="font-bold truncate">${file.name}</span>
+            <span class="text-gray-500 text-[10px]">(${file.size})</span>
+          </div>
+          <button onclick="previewFile(${idx})" class="win-button text-[10px] px-1 py-0.5">Inspect</button>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function previewFile(idx) {
+      const file = virtualFiles[idx];
+      beep(550, 40);
+      const container = document.getElementById("filePreviewContainer");
+      const title = document.getElementById("filePreviewTitle");
+      const content = document.getElementById("filePreviewContent");
+
+      container.classList.remove("hidden");
+      title.textContent = `Preview: ${file.name} [${file.type}]`;
+
+      if (file.isImage) {
+        content.innerHTML = `<img src="${file.content}" class="max-h-24 win-inset p-1 bg-white" alt="preview" />`;
+      } else {
+        content.textContent = file.content.slice(0, 1000);
+      }
+    }
+
+    function clearVirtualDrive() {
+      beep(250, 100);
+      virtualFiles = [];
+      document.getElementById("filePreviewContainer").classList.add("hidden");
+      renderVirtualFiles();
+    }
+    renderVirtualFiles();
+
+    // ================= CALCULATOR LOGIC =================
+    let calcVal = "0";
+    let calcOpVal = null;
+    let calcPrev = null;
+
+    function updateCalcDisplay() {
+      document.getElementById("calcDisplay").textContent = calcVal;
+    }
+
+    function calcNum(n) {
+      beep(700, 20);
+      if (calcVal === "0" && n !== ".") {
+        calcVal = n;
+      } else {
+        calcVal += n;
+      }
+      updateCalcDisplay();
+    }
+
+    function calcClear() {
+      beep(400, 30);
+      calcVal = "0";
+      calcOpVal = null;
+      calcPrev = null;
+      updateCalcDisplay();
+    }
+
+    function calcBackspace() {
+      beep(500, 20);
+      calcVal = calcVal.slice(0, -1) || "0";
+      updateCalcDisplay();
+    }
+
+    function calcOp(op) {
+      beep(800, 30);
+      calcPrev = parseFloat(calcVal);
+      calcOpVal = op;
+      calcVal = "0";
+    }
+
+    function calcEqual() {
+      beep(900, 40);
+      if (calcOpVal && calcPrev !== null) {
+        const cur = parseFloat(calcVal);
+        let res = 0;
+        if (calcOpVal === "+") res = calcPrev + cur;
+        if (calcOpVal === "-") res = calcPrev - cur;
+        if (calcOpVal === "*") res = calcPrev * cur;
+        if (calcOpVal === "/") res = cur !== 0 ? calcPrev / cur : "Error";
+        calcVal = String(res);
+        calcOpVal = null;
+        calcPrev = null;
+        updateCalcDisplay();
+      }
+    }
+
+    // ================= DISPLAY PROPERTIES & WALLPAPER =================
+    function setWallpaper(className) {
+      beep(650, 30);
+      const b = document.getElementById("desktopBody");
+      b.className = `min-h-screen relative flex flex-col justify-between ${className} ${crtEnabled ? 'crt-overlay' : ''}`;
+      document.getElementById("wallpaperMiniMonitor").className = `w-full h-full win-inset ${className} flex items-center justify-center text-[10px] text-white`;
+    }
+
+    function setCustomWallpaper() {
+      const url = document.getElementById("customWpUrl").value.trim();
+      if (!url) return;
+      beep(650, 30);
+      const b = document.getElementById("desktopBody");
+      b.style.backgroundImage = `url('${url}')`;
+      b.style.backgroundSize = "cover";
+      b.style.backgroundPosition = "center";
+    }
+
+    // ================= MS-DOS PROMPT LOGIC =================
+    function handleTerminalCommand(e) {
+      if (e.key === 'Enter') {
+        const input = document.getElementById("termInput");
+        const term = document.getElementById("termOutput");
+        const cmd = input.value.trim().toLowerCase();
+        beep(750, 20);
+
+        term.innerHTML += `<div>C:\\USERS\\ADMIN&gt; ${input.value}</div>`;
+
+        if (cmd === 'help') {
+          term.innerHTML += `
+            <div class="text-yellow-300">Supported Commands:</div>
+            <div>DIR        - List portfolio directory files</div>
+            <div>ABOUT      - Display developer bio overview</div>
+            <div>PROJECTS   - List portfolio projects</div>
+            <div>SKILLS     - View technical core proficiencies</div>
+            <div>CONTACT    - Display social & email links</div>
+            <div>CLS        - Clear screen</div>
+            <div>DATE       - Current workstation date/time</div>
+            <div>MATRIX     - Run visual cyber code stream</div>
+          `;
+        } else if (cmd === 'dir') {
+          term.innerHTML += `
+            <div> Volume in drive C is RETRO_PORTFOLIO</div>
+            <div> Directory of C:\\USERS\\ADMIN</div>
+            <br>
+            <div>ABOUT_ME TXT         1,420 bytes</div>
+            <div>PROJECTS DIR         &lt;DIR&gt;</div>
+            <div>CALC     EXE        24,576 bytes</div>
+            <div>PANDAS95 PY         48,192 bytes</div>
+            <div>RESUME   PDF       152,044 bytes</div>
+            <div class="text-gray-400">      5 File(s)    226,232 bytes</div>
+          `;
+        } else if (cmd === 'cls') {
+          term.innerHTML = '';
+        } else if (cmd === 'about') {
+          term.innerHTML += `<div class="text-cyan-300">Alexander Dev: Full Stack Engineer specialized in high-performance web applications and retro system emulators.</div>`;
+        } else if (cmd === 'skills') {
+          term.innerHTML += `<div>Python, TypeScript, React, C++, Node.js, WebGL, Docker, SQL</div>`;
+        } else if (cmd === 'contact') {
+          term.innerHTML += `<div>GitHub: github.com/developer | Email: dev@workstation98.net</div>`;
+        } else if (cmd === 'projects') {
+          term.innerHTML += `
+            <div>1. Pandas95 Data Inspector (In-Browser WASM)</div>
+            <div>2. RetroRider 8-Bit Canvas Highway</div>
+            <div>3. CyberCity ICE Breaker Terminal</div>
+            <div>4. VaporWave 3D Horizon Visualizer</div>
+          `;
+        } else if (cmd === 'date') {
+          term.innerHTML += `<div>Current Date: ${new Date().toUTCString()}</div>`;
+        } else if (cmd === 'matrix') {
+          term.innerHTML += `<div class="text-green-400">Wake up, Neo... The Matrix has you. Follow the white rabbit. 🐇</div>`;
+        } else if (cmd === '') {
+          // blank line
+        } else {
+          term.innerHTML += `<div class="text-red-400">Bad command or file name. Type 'help' for command manual.</div>`;
+        }
+
+        input.value = '';
+        term.scrollTop = term.scrollHeight;
+      }
+    }
+
+    // ================= NOTEPAD LOGIC =================
     const notepadEl = document.getElementById("notepadText");
     notepadEl.addEventListener("input", () => {
       document.getElementById("notepadCharCount").textContent = `${notepadEl.value.length} characters`;
@@ -1262,105 +1352,25 @@
 
     function clearNotepad() {
       beep(450, 30);
-      currentEditingFileId = null;
       notepadEl.value = "";
-      document.getElementById("notepadTitle").textContent = "Notepad - Untitled";
       document.getElementById("notepadCharCount").textContent = "0 characters";
-      document.getElementById("notepadFileStatus").textContent = "Draft Mode";
     }
 
-    async function saveNotepadFile() {
+    function saveNotepadFile() {
       beep(700, 40);
       const text = notepadEl.value;
-
-      if (currentEditingFileId) {
-        const files = await dbGetAllFiles();
-        const file = files.find(f => f.id === currentEditingFileId);
-        if (file) {
-          file.content = text;
-          file.size = `${(text.length / 1024).toFixed(1)} KB`;
-          await dbSaveFile(file);
-          renderUserDesktopIcons();
-          alertSystem(`Saved updates to '${file.name}' on Desktop!`, "Notepad Save", "💾");
-          return;
-        }
-      }
-
-      // New file
-      const fileName = `Note_${Date.now().toString().slice(-4)}.txt`;
-      const newFile = {
-        id: "file_" + Date.now(),
-        name: fileName,
+      virtualFiles.push({
+        name: `Note_${Date.now().toString().slice(-4)}.txt`,
         size: `${(text.length / 1024).toFixed(1)} KB`,
-        rawSize: text.length,
         type: "text/plain",
-        category: "text",
-        icon: "📝",
-        content: text,
-        timestamp: Date.now()
-      };
-
-      currentEditingFileId = newFile.id;
-      document.getElementById("notepadTitle").textContent = `Notepad - ${fileName}`;
-      document.getElementById("notepadFileStatus").textContent = `Editing: ${fileName}`;
-      await dbSaveFile(newFile);
-      renderUserDesktopIcons();
-      alertSystem(`Saved '${fileName}' to Desktop & IndexedDB storage!`, "Notepad Save", "💾");
+        content: text
+      });
+      renderVirtualFiles();
+      alertSystem("Note successfully saved to Drive C:\\ virtual cabinet!", "Notepad Save", "💾");
     }
 
-    function downloadCurrentNotepadFile() {
-      beep(600, 40);
-      const text = notepadEl.value;
-      const title = document.getElementById("notepadTitle").textContent.replace("Notepad - ", "").trim() || "document.txt";
-      const a = document.createElement("a");
-      a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
-      a.download = title.endsWith(".txt") ? title : `${title}.txt`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-
-    // ================= DISPLAY PROPERTIES & WALLPAPERS (PERSISTENT) =================
-    async function setWallpaper(className) {
-      beep(650, 30);
-      const b = document.getElementById("desktopBody");
-      b.style.backgroundImage = "";
-      b.className = `min-h-screen relative flex flex-col justify-between ${className} ${crtEnabled ? 'crt-overlay' : ''}`;
-      document.getElementById("wallpaperMiniMonitor").className = `w-full h-full win-inset ${className} flex items-center justify-center text-[10px] text-white`;
-      await dbSaveSetting("wallpaper_class", className);
-      await dbSaveSetting("wallpaper_custom_url", null);
-    }
-
-    async function setCustomWallpaper() {
-      const url = document.getElementById("customWpUrl").value.trim();
-      if (!url) return;
-      setCustomWallpaperDirect(url);
-    }
-
-    async function setCustomWallpaperDirect(url) {
-      beep(650, 30);
-      const b = document.getElementById("desktopBody");
-      b.style.backgroundImage = `url('${url}')`;
-      b.style.backgroundSize = "cover";
-      b.style.backgroundPosition = "center";
-      await dbSaveSetting("wallpaper_custom_url", url);
-    }
-
-    // Guestbook persistence
-    async function loadGuestbook() {
-      const savedEntries = await dbGetSetting("guestbook_entries");
-      if (savedEntries && Array.isArray(savedEntries)) {
-        const list = document.getElementById("guestbookList");
-        list.innerHTML = "";
-        savedEntries.forEach(ent => {
-          const entry = document.createElement("div");
-          entry.innerHTML = `<b class="text-green-800">${escapeHtml(ent.name)}:</b> ${escapeHtml(ent.msg)}`;
-          list.appendChild(entry);
-        });
-      }
-    }
-
-    async function addGuestbookEntry() {
+    // Guestbook handler
+    function addGuestbookEntry() {
       const nameInput = document.getElementById("guestName");
       const msgInput = document.getElementById("guestMessage");
       const name = nameInput.value.trim() || "Anonymous";
@@ -1377,36 +1387,27 @@
       list.appendChild(entry);
       list.scrollTop = list.scrollHeight;
 
-      // Save to IDB
-      let current = (await dbGetSetting("guestbook_entries")) || [
-        { name: "Morpheus", msg: "Welcome to the real world." },
-        { name: "Ada Lovelace", msg: "Great portfolio! Keep on compiling!" }
-      ];
-      current.push({ name, msg });
-      await dbSaveSetting("guestbook_entries", current);
-
       nameInput.value = "";
       msgInput.value = "";
     }
 
-    // Initial boot & restore settings from IndexedDB
-    window.addEventListener('load', async () => {
-      updateTaskbar();
-      await initDatabase();
-      await renderUserDesktopIcons();
-      await loadGuestbook();
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[m]));
+    }
 
-      // Restore custom wallpaper
-      const customUrl = await dbGetSetting("wallpaper_custom_url");
-      if (customUrl) {
-        setCustomWallpaperDirect(customUrl);
-      } else {
-        const wpClass = await dbGetSetting("wallpaper_class");
-        if (wpClass) {
-          const b = document.getElementById("desktopBody");
-          b.className = `min-h-screen relative flex flex-col justify-between ${wpClass}`;
-        }
-      }
+    function restartSystem() {
+      beep(300, 300);
+      alertSystem("Shutting down RetroOS 98... It is now safe to turn off your computer.", "System Halt", "💻");
+      setTimeout(() => {
+        location.reload();
+      }, 2500);
+    }
+
+    // Initial boot
+    window.addEventListener('load', () => {
+      updateTaskbar();
     });
   </script>
 </body>
