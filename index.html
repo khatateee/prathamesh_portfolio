@@ -12,7 +12,10 @@
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
+  
+  <!-- Database-->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!--Database close-->
   <style>
     /* 90s System Color Tokens */
     :root {
@@ -1369,6 +1372,8 @@
       alertSystem("Note successfully saved to Drive C:\\ virtual cabinet!", "Notepad Save", "💾");
     }
 
+
+
     // Guestbook handler
     function addGuestbookEntry() {
       const nameInput = document.getElementById("guestName");
@@ -1408,6 +1413,32 @@
     // Initial boot
     window.addEventListener('load', () => {
       updateTaskbar();
+
+     // guestbook database
+      const supabaseUrl = 'ozmuloqljmidjviidltv';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96bXVsb3Fsam1pZGp2aWlkbHR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyNjIwMTMsImV4cCI6MjEwODgzODAxM30.iqMXDAbImWLqUeZm5Z2Kf9pucKtGguObNzl-RXsTVGE';
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+async function fetchGuestbook() {
+  const { data, error } = await supabase
+    .from('guestbook')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (data) {
+    const container = document.getElementById('guestbook-entries');
+    container.innerHTML = data.map(entry => `
+      <div style="background:#fff; border:2px inset #808080; padding:6px; margin-bottom:6px;">
+        <strong>${entry.name}</strong>: ${entry.message}
+      </div>
+    `).join('');
+  }
+}
+
+async function addGuestbookEntry(name, message) {
+  await supabase.from('guestbook').insert([{ name, message }]);
+  fetchGuestbook();
+}
     });
   </script>
 </body>
