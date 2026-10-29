@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetroOS 98 - Developer Portfolio Workstation</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Pixelify+Sans:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* 90s System Color Tokens */
+    :root {
+      --win-bg: #c0c0c0;
+      --win-light: #ffffff;
+      --win-shadow-dark: #000000;
+      --win-shadow-mid: #808080;
+      --win-blue-start: #000080;
+      --win-blue-end: #1084d0;
+      --desktop-bg: #008080;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--desktop-bg);
+      font-family: 'Courier Prime', -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Authentic 90s Outset & Inset Bevels */
+    .win-outset {
+      border: 2px solid;
+      border-color: var(--win-light) var(--win-shadow-dark) var(--win-shadow-dark) var(--win-light);
+      box-shadow: inset 1px 1px 0px #dfdfdf, inset -1px -1px 0px var(--win-shadow-mid);
+    }
+
+    .win-inset {
+      border: 2px solid;
+      border-color: var(--win-shadow-mid) var(--win-light) var(--win-light) var(--win-shadow-mid);
+      box-shadow: inset 1px 1px 0px var(--win-shadow-dark), inset -1px -1px 0px #dfdfdf;
+    }
+
+    .win-button {
+      background-color: var(--win-bg);
+      border: 2px solid;
+      border-color: var(--win-light) var(--win-shadow-dark) var(--win-shadow-dark) var(--win-light);
+      box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px var(--win-shadow-mid);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      padding: 2px 6px;
+    }
+
+    .win-button:active, .win-button.active {
+      border-color: var(--win-shadow-dark) var(--win-light) var(--win-light) var(--win-shadow-dark);
+      box-shadow: inset 1px 1px 0px var(--win-shadow-mid), inset -1px -1px 0px #ffffff;
+      padding-top: 3px;
+      padding-left: 7px;
+      padding-bottom: 1px;
+      padding-right: 5px;
+    }
+
+    .win-titlebar {
+      background: linear-gradient(90deg, var(--win-blue-start) 0%, var(--win-blue-end) 100%);
+      color: white;
+    }
+
+    .win-titlebar.inactive {
+      background: linear-gradient(90deg, #707070 0%, #a0a0a0 100%);
+      color: #dfdfdf;
+    }
+
+    /* CRT Scanline Filter */
+    .crt-overlay::after {
+      content: " ";
+      display: block;
+      position: fixed;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.28) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      z-index: 99999;
+      background-size: 100% 3px, 6px 100%;
+      pointer-events: none;
+      opacity: 0.85;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 16px;
+      height: 16px;
+      background: #dfdfdf;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: var(--win-bg);
+      border: 2px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px #000000;
+    }
+    ::-webkit-scrollbar-button {
+      background: var(--win-bg);
+      border: 1px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Wallpaper Themes */
+    .wp-teal { background-color: #008080; background-image: none; }
+    .wp-clouds {
+      background: #3a82ee;
+      background-image: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.7) 0%, transparent 40%),
+                        radial-gradient(circle at 20% 60%, rgba(255,255,255,0.5) 0%, transparent 30%),
+                        radial-gradient(circle at 80% 50%, rgba(255,255,255,0.6) 0%, transparent 35%);
+    }
+    .wp-grid {
+      background-color: #0f051d;
+      background-image: linear-gradient(rgba(255, 0, 128, 0.3) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(0, 255, 255, 0.3) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .wp-memphis {
+      background-color: #e5e5f7;
+      opacity: 1;
+      background-image: radial-gradient(#444cf7 1.5px, #e5e5f7 1.5px);
+      background-size: 18px 18px;
+    }
+    .wp-starfield {
+      background-color: #000005;
+      background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
+      background-size: 350px 350px, 200px 200px;
+    }
+
+    .pixel-font { font-family: 'VT323', monospace; }
+  </style>
+</head>
+<body id="desktopBody" class="wp-teal relative flex flex-col justify-between" oncontextmenu="openDesktopContextMenu(event)">
+
+  <!-- ================= DESKTOP AREA ================= -->
+  <div id="desktop" class="flex-1 relative w-full h-full overflow-hidden p-3" onclick="onDesktopClick(event)" ondragover="onDesktopDragOver(event)" ondragleave="onDesktopDragLeave(event)" ondrop="onDesktopDrop(event)">
+    
+    <!-- Drag overlay indicator -->
+    <div id="desktopDropZoneGuide" class="hidden absolute inset-2 win-inset bg-blue-500/10 border-4 border-dashed border-white pointer-events-none z-30 flex items-center justify-center">
+      <div class="win-outset bg-[#c0c0c0] p-4 text-black font-mono font-bold text-center shadow-2xl flex flex-col items-center gap-2">
+        <span class="text-4xl animate-bounce">📥</span>
+        <span>RELEASE TO MOUNT FILES DIRECTLY ON DESKTOP</span>
+        <span class="text-[10px] text-gray-600 font-normal">Files will be persistently saved to IndexedDB storage</span>
+      </div>
+    </div>
+
+    <!-- Hidden system file picker for context menu -->
+    <input type="file" id="desktopHiddenFileInput" class="hidden" multiple onchange="handleDirectDesktopFiles(this.files)" />
+
+    <!-- DESKTOP ICONS GRID -->
+    <div id="desktopIconsContainer" class="flex flex-col flex-wrap content-start items-start gap-4 h-full w-auto max-w-full z-0 select-none pb-12">
+      
+      <!-- System Desktop Icons (Static) -->
+      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40" onclick="openApp('aboutWindow', event)" ondblclick="openApp('aboutWindow', event)">
+        <div class="text-3xl filter drop-shadow">👤</div>
+        <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight shadow-sm select-none">About_Me.txt</span>
+      </div>
+
+      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40" onclick="openApp('projectsWindow', event)" ondblclick="openApp('projectsWindow', event)">
+        <div class="text-3xl filter drop-shadow">💼</div>
+        <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight select-none">Projects</span>
+      </div>
+
+      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40" onclick="openApp('cabinetWindow', event)" ondblclick="openApp('cabinetWindow', event)">
+        <div class="text-3xl filter drop-shadow">🗄️</div>
+        <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight select-none">Drop_Disk(C:)</span>
+      </div>
+
+      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40" onclick="openApp('calcWindow', event)" ondblclick="openApp('calcWindow', event)">
+        <div class="text-3xl filter drop-shadow">🧮</div>
+        <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight select-none">Calc.exe</span>
+      </div>
+
+      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40" onclick="openApp('displayWindow', event)" ondblclick="openApp('displayWindow', event)">
+        <div class="text-3xl filter drop-shadow">🖥️</div>
+        <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight select-none">Display</span>
+      </div>
+
+      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40" onclick="openApp('terminalWindow', event)" ondblclick="openApp('terminalWindow', event)">
+        <div class="text-3xl filter drop-shadow">📟</div>
+        <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight select-none">MS-DOS</span>
+      </div>
+
+      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40" onclick="openApp('notepadWindow', event)" ondblclick="openApp('notepadWindow', event)">
+        <div class="text-3xl filter drop-shadow">📝</div>
+        <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight select-none">Notepad</span>
+      </div>
+
+      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40" onclick="openProject('pandas95')" ondblclick="openProject('pandas95')">
+        <div class="text-3xl filter drop-shadow">🐍</div>
+        <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight select-none">Pandas95</span>
+      </div>
+
+      <div class="desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40" onclick="openProject('arcade')" ondblclick="openProject('arcade')">
+        <div class="text-3xl filter drop-shadow">👾</div>
+        <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight select-none">RetroRider</span>
+      </div>
+
+      <!-- Container for User Saved & Dropped Persistent Desktop Files -->
+      <div id="userDesktopIcons" class="contents"></div>
+
+    </div>
+
+    <!-- ================= WINDOWS STACK ================= -->
+
+    <!-- 1. WINDOW: ABOUT ME / PORTFOLIO -->
+    <div id="aboutWindow" class="retro-window win-outset absolute bg-[#c0c0c0] w-[95%] max-w-xl left-4 top-6 flex flex-col shadow-2xl" style="z-index: 10;">
+      <div class="win-titlebar flex items-center justify-between px-2 py-1 cursor-move" onmousedown="startDrag(event, 'aboutWindow')">
+        <div class="flex items-center gap-1 font-bold text-xs truncate">
+          <span>👤</span>
+          <span>About_Me.txt - Personal Workstation Homepage</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <button class="win-button text-black text-xs w-4 h-4" onclick="minimizeApp('aboutWindow')">_</button>
+          <button class="win-button text-black text-xs w-4 h-4" onclick="toggleMaximize('aboutWindow')">□</button>
+          <button class="win-button text-black text-xs w-4 h-4 font-bold" onclick="closeApp('aboutWindow')">×</button>
+        </div>
+      </div>
+      <!-- Menu bar -->
+      <div class="bg-[#c0c0c0] border-b border-[#808080] px-2 py-0.5 text-xs flex gap-3 text-black">
+        <span class="hover:bg-[#000080] hover:text-white px-1 cursor-pointer" onclick="beep(800, 40)"><u>F</u>ile</span>
+        <span class="hover:bg-[#000080] hover:text-white px-1 cursor-pointer" onclick="beep(800, 40)"><u>V</u>iew</span>
+        <span class="hover:bg-[#000080] hover:text-white px-1 cursor-pointer" onclick="alertSystem('Best viewed with Netscape Navigator 3.0 at 800x600 resolution!')"><u>H</u>elp</span>
+      </div>
+      <!-- Content -->
+      <div class="p-3 bg-[#c0c0c0] text-xs font-mono overflow-y-auto max-h-[70vh] flex flex-col gap-3">
+        <div class="win-inset bg-white p-3 space-y-3 text-black">
+          <div class="flex items-center gap-3 border-b pb-2">
+            <div class="w-16 h-16 bg-blue-100 win-inset flex items-center justify-center text-3xl">👨‍💻</div>
+            <div>
+              <h2 class="text-sm font-bold text-[#000080]">ALEXANDER "CYBER" DEV</h2>
+              <p class="text-[11px] text-gray-600">Full Stack Systems Engineer & Creative Coder</p>
+              <div class="flex gap-1 mt-1 text-[10px]">
+                <span class="bg-yellow-200 px-1 border border-black">OPEN FOR WORK</span>
+                <span class="bg-green-200 px-1 border border-black">REMOTE READY</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="font-bold text-[#000080] underline mb-1">BIOGRAPHY:</h3>
+            <p class="text-[11px] leading-relaxed">
+              Welcome to my vintage digital portfolio workstation! I build modern web applications, distributed systems, and real-time interactive tools. Obsessed with retro computing, low-level optimization, and clean architectural design.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="font-bold text-[#000080] underline mb-1">TECHNICAL ARSENAL:</h3>
+            <div class="grid grid-cols-2 gap-1 text-[11px]">
+              <div>• <b>Languages:</b> Python, TypeScript, C++, Rust, Go</div>
+              <div>• <b>Frontend:</b> React, Vue, Tailwind, WebGL, Three.js</div>
+              <div>• <b>Backend:</b> Node.js, FastAPI, Docker, PostgreSQL</div>
+              <div>• <b>Data:</b> Pandas, NumPy, Redis, GraphQL</div>
+            </div>
+          </div>
+
+          <!-- 90s Web Badges -->
+          <div class="flex flex-wrap gap-2 pt-2 border-t text-[10px]">
+            <span class="win-outset bg-black text-[#00ff66] px-1 font-bold">MADE WITH 100% NOTEPAD</span>
+            <span class="win-outset bg-blue-900 text-white px-1 font-bold">HTML 4.0 CERTIFIED</span>
+            <span class="win-outset bg-purple-900 text-white px-1 font-bold">NO COOKIES / PURE FUN</span>
+          </div>
+        </div>
+
+        <!-- Interactive Guestbook -->
+        <fieldset class="win-inset p-2 bg-[#dfdfdf]">
+          <legend class="text-[11px] font-bold text-[#000080] px-1">Sign Digital Guestbook</legend>
+          <div class="flex gap-1 mt-1">
+            <input type="text" id="guestName" placeholder="Your Name" class="win-inset px-2 py-1 text-xs flex-1 bg-white" />
+            <input type="text" id="guestMessage" placeholder="Leave a message..." class="win-inset px-2 py-1 text-xs flex-2 bg-white" />
+            <button onclick="addGuestbookEntry()" class="win-button text-xs font-bold">Sign</button>
+          </div>
+          <div id="guestbookList" class="mt-2 win-inset bg-white p-1.5 max-h-24 overflow-y-auto text-[11px] space-y-1">
+            <div><b class="text-blue-800">Morpheus:</b> Welcome to the real world.</div>
+            <div><b class="text-purple-800">Ada Lovelace:</b> Great portfolio! Keep on compiling!</div>
+          </div>
+        </fieldset>
+      </div>
+      <!-- Statusbar -->
+      <div class="win-inset bg-[#dfdfdf] px-2 py-0.5 text-[10px] flex justify-between text-black">
+        <span>Line: 42, Col: 1</span>
+        <span>Encoding: ANSI Windows-1252</span>
+      </div>
+    </div>
+
+    <!-- 2. WINDOW: PROJECTS EXPLORER -->
+    <div id="projectsWindow" class="retro-window win-outset absolute bg-[#c0c0c0] w-[95%] max-w-2xl left-12 top-14 flex flex-col shadow-2xl hidden" style="z-index: 11;">
+      <div class="win-titlebar flex items-center justify-between px-2 py-1 cursor-move" onmousedown="startDrag(event, 'projectsWindow')">
+        <div class="flex items-center gap-1 font-bold text-xs">
+          <span>💼</span>
+          <span>Projects Explorer - C:\PORTFOLIO\PROJECTS</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <button class="win-button text-black text-xs w-4 h-4" onclick="minimizeApp('projectsWindow')">_</button>
+          <button class="win-button text-black text-xs w-4 h-4" onclick="toggleMaximize('projectsWindow')">□</button>
+          <button class="win-button text-black text-xs w-4 h-4 font-bold" onclick="closeApp('projectsWindow')">×</button>
+        </div>
+      </div>
+      <div class="bg-[#c0c0c0] border-b border-[#808080] px-2 py-1 text-xs flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span>Address:</span>
+          <div class="win-inset bg-white px-2 py-0.5 text-[11px] font-mono text-gray-800">C:\Users\Admin\Projects</div>
+        </div>
+        <span class="text-[10px] text-gray-600">4 Objects</span>
+      </div>
+      
+      <!-- Explorer Grid -->
+      <div class="p-3 bg-white win-inset min-h-[300px] overflow-y-auto">
+        <p class="text-xs text-gray-600 mb-3 italic">Double-click or tap an application to boot its unique dedicated runtime environment:</p>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono">
+          
+          <!-- Project 1: Pandas95 Data Inspector -->
+          <div onclick="openProject('pandas95')" class="win-outset bg-[#dfdfdf] p-2 flex gap-3 items-start cursor-pointer hover:bg-blue-100 hover:border-blue-900 transition-colors">
+            <div class="text-3xl p-1 bg-white win-inset">🐍</div>
+            <div class="flex-1">
+              <h4 class="font-bold text-xs text-[#000080]">1. Pandas95 Engine</h4>
+              <p class="text-[11px] text-gray-700 leading-tight">In-browser data analyzer with drag-and-drop file ingestion, descriptive stats & CSV/XLSX summary.</p>
+              <span class="text-[9px] bg-green-200 text-green-900 px-1 border border-black mt-1 inline-block">LAUNCH REPL</span>
+            </div>
+          </div>
+
+          <!-- Project 2: Retro Arcade Road Racer -->
+          <div onclick="openProject('arcade')" class="win-outset bg-[#dfdfdf] p-2 flex gap-3 items-start cursor-pointer hover:bg-blue-100 hover:border-blue-900 transition-colors">
+            <div class="text-3xl p-1 bg-white win-inset">🏍️</div>
+            <div class="flex-1">
+              <h4 class="font-bold text-xs text-[#000080]">2. RetroRider (Canvas 8-Bit)</h4>
+              <p class="text-[11px] text-gray-700 leading-tight">Fast-paced pseudo-3D road rash motorcycle runner built with raw HTML5 Canvas.</p>
+              <span class="text-[9px] bg-red-200 text-red-900 px-1 border border-black mt-1 inline-block">PLAY GAME</span>
+            </div>
+          </div>
+
+          <!-- Project 3: Cyberpunk Neon Terminal -->
+          <div onclick="openProject('cyberpunk')" class="win-outset bg-[#dfdfdf] p-2 flex gap-3 items-start cursor-pointer hover:bg-blue-100 hover:border-blue-900 transition-colors">
+            <div class="text-3xl p-1 bg-white win-inset">⚡</div>
+            <div class="flex-1">
+              <h4 class="font-bold text-xs text-[#000080]">3. CyberCity Hack Matrix</h4>
+              <p class="text-[11px] text-gray-700 leading-tight">Futuristic neon hacking simulator with live matrix rain and audio synthesizers.</p>
+              <span class="text-[9px] bg-purple-200 text-purple-900 px-1 border border-black mt-1 inline-block">ENTER MATRIX</span>
+            </div>
+          </div>
+
+          <!-- Project 4: 3D Vaporwave Horizon -->
+          <div onclick="openProject('vaporwave')" class="win-outset bg-[#dfdfdf] p-2 flex gap-3 items-start cursor-pointer hover:bg-blue-100 hover:border-blue-900 transition-colors">
+            <div class="text-3xl p-1 bg-white win-inset">🌴</div>
+            <div class="flex-1">
+              <h4 class="font-bold text-xs text-[#000080]">4. VaporWave Synth Horizon</h4>
+              <p class="text-[11px] text-gray-700 leading-tight">Dynamic retro aesthetic audio-visual horizon with synth chiptunes and wireframe mountains.</p>
+              <span class="text-[9px] bg-pink-200 text-pink-900 px-1 border border-black mt-1 inline-block">EXPLORE 3D</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="win-inset bg-[#dfdfdf] px-2 py-0.5 text-[10px] text-gray-700">Ready to execute project environments.</div>
+    </div>
+
+    <!-- 3. WINDOW: DYNAMIC PROJECT HOSTING CONTAINER -->
+    <div id="projectHostWindow" class="retro-window win-outset absolute bg-[#c0c0c0] w-[95%] max-w-4xl left-8 top-8 flex flex-col shadow-2xl hidden" style="z-index: 20;">
+      <div id="projectHostTitlebar" class="win-titlebar flex items-center justify-between px-2 py-1 cursor-move" onmousedown="startDrag(event, 'projectHostWindow')">
+        <div class="flex items-center gap-1 font-bold text-xs truncate">
+          <span id="projectHostIcon">🚀</span>
+          <span id="projectHostTitle">Project Environment</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <button class="win-button text-black text-xs w-4 h-4" onclick="minimizeApp('projectHostWindow')">_</button>
+          <button class="win-button text-black text-xs w-4 h-4" onclick="toggleMaximize('projectHostWindow')">□</button>
+          <button class="win-button text-black text-xs w-4 h-4 font-bold" onclick="closeApp('projectHostWindow')">×</button>
+        </div>
+      </div>
+      <div id="projectHostBody" class="p-2 min-h-[420px] bg-black text-white overflow-hidden flex flex-col">
+        <!-- Rendered by openProject() dynamically -->
+      </div>
+    </div>
+
+    <!-- 4. WINDOW: FILE CABINET / STORAGE (Drag & Drop) -->
+    <div id="cabinetWindow" class="retro-window win-outset absolute bg-[#c0c0c0] w-[95%] max-w-xl left-16 top-16 flex flex-col shadow-2xl hidden" style="z-index: 12;">
+      <div class="win-titlebar flex items-center justify-between px-2 py-1 cursor-move" onmousedown="startDrag(event, 'cabinetWindow')">
+        <div class="flex items-center gap-1 font-bold text-xs">
+          <span>🗄️</span>
+          <span>Drive C:\DropCabinet (Virtual Storage)</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <button class="win-button text-black text-xs w-4 h-4" onclick="minimizeApp('cabinetWindow')">_</button>
+          <button class="win-button text-black text-xs w-4 h-4" onclick="toggleMaximize('cabinetWindow')">□</button>
+          <button class="win-button text-black text-xs w-4 h-4 font-bold" onclick="closeApp('cabinetWindow')">×</button>
+        </div>
+      </div>
+      
+      <div class="p-3 bg-[#c0c0c0] flex flex-col gap-3 font-mono text-xs">
+        <!-- Drag & Drop Zone -->
+        <div id="cabinetDropZone" class="win-inset bg-white p-4 border-2 border-dashed border-gray-600 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-yellow-50 transition-colors">
+          <input type="file" id="cabinetFileInput" class="hidden" multiple onchange="handleCabinetFiles(this.files)" />
+          <div class="text-3xl mb-1">📂</div>
+          <p class="font-bold text-black text-xs">DRAG FILES HERE TO STORE ON VIRTUAL DISK</p>
+          <p class="text-[10px] text-gray-500">Supports text, code, images, CSV, etc.</p>
+          <button type="button" onclick="document.getElementById('cabinetFileInput').click()" class="win-button text-xs mt-2">
+            Browse Drive...
+          </button>
+        </div>
+
+        <!-- Files Stored List -->
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-bold text-black text-[11px]">Mounted Virtual Sector:</span>
+            <button onclick="clearVirtualDrive()" class="win-button text-[10px] text-red-900">Format Disk</button>
+          </div>
+          <div class="win-inset bg-white p-2 min-h-[140px] max-h-48 overflow-y-auto">
+            <div id="virtualFileList" class="space-y-1">
+              <!-- Dynamically populated -->
+              <div class="text-gray-400 italic text-[11px] p-2 text-center">Disk drive empty. Drop files above to save!</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- File Preview Panel -->
+        <div id="filePreviewContainer" class="hidden win-inset bg-[#f4f4f4] p-2 max-h-36 overflow-auto text-black text-[11px]">
+          <div class="font-bold text-[#000080] border-b pb-1 mb-1" id="filePreviewTitle">Preview</div>
+          <div id="filePreviewContent" class="font-mono whitespace-pre-wrap break-all"></div>
+        </div>
+      </div>
+      <div class="win-inset bg-[#dfdfdf] px-2 py-0.5 text-[10px] text-black flex justify-between">
+        <span id="diskFreeSpace">Free: 1.44 MB</span>
+        <span>FAT16 File System</span>
+      </div>
+    </div>
+
+    <!-- 5. WINDOW: CALCULATOR -->
+    <div id="calcWindow" class="retro-window win-outset absolute bg-[#c0c0c0] w-64 left-24 top-20 flex flex-col shadow-2xl hidden" style="z-index: 13;">
+      <div class="win-titlebar flex items-center justify-between px-2 py-1 cursor-move" onmousedown="startDrag(event, 'calcWindow')">
+        <div class="flex items-center gap-1 font-bold text-xs">
+          <span>🧮</span>
+          <span>Calculator</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <button class="win-button text-black text-xs w-4 h-4 font-bold" onclick="closeApp('calcWindow')">×</button>
+        </div>
+      </div>
+      <div class="p-2 bg-[#c0c0c0]">
+        <!-- Screen -->
+        <div class="win-inset bg-white p-2 text-right font-mono font-bold text-lg mb-2 text-black overflow-x-auto" id="calcDisplay">
+          0
+        </div>
+        <!-- Buttons grid -->
+        <div class="grid grid-cols-4 gap-1 text-xs font-mono font-bold">
+          <button onclick="calcClear()" class="win-button text-red-700 col-span-2">C</button>
+          <button onclick="calcBackspace()" class="win-button">DEL</button>
+          <button onclick="calcOp('/')" class="win-button text-blue-900">/</button>
+
+          <button onclick="calcNum('7')" class="win-button">7</button>
+          <button onclick="calcNum('8')" class="win-button">8</button>
+          <button onclick="calcNum('9')" class="win-button">9</button>
+          <button onclick="calcOp('*')" class="win-button text-blue-900">*</button>
+
+          <button onclick="calcNum('4')" class="win-button">4</button>
+          <button onclick="calcNum('5')" class="win-button">5</button>
+          <button onclick="calcNum('6')" class="win-button">6</button>
+          <button onclick="calcOp('-')" class="win-button text-blue-900">-</button>
+
+          <button onclick="calcNum('1')" class="win-button">1</button>
+          <button onclick="calcNum('2')" class="win-button">2</button>
+          <button onclick="calcNum('3')" class="win-button">3</button>
+          <button onclick="calcOp('+')" class="win-button text-blue-900">+</button>
+
+          <button onclick="calcNum('0')" class="win-button col-span-2">0</button>
+          <button onclick="calcNum('.')" class="win-button">.</button>
+          <button onclick="calcEqual()" class="win-button text-green-900">=</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. WINDOW: DISPLAY PROPERTIES & WALLPAPERS -->
+    <div id="displayWindow" class="retro-window win-outset absolute bg-[#c0c0c0] w-[90%] max-w-md left-20 top-24 flex flex-col shadow-2xl hidden" style="z-index: 14;">
+      <div class="win-titlebar flex items-center justify-between px-2 py-1 cursor-move" onmousedown="startDrag(event, 'displayWindow')">
+        <div class="flex items-center gap-1 font-bold text-xs">
+          <span>🖥️</span>
+          <span>Display Properties</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <button class="win-button text-black text-xs w-4 h-4 font-bold" onclick="closeApp('displayWindow')">×</button>
+        </div>
+      </div>
+      <div class="p-3 bg-[#c0c0c0] font-mono text-xs flex flex-col gap-3">
+        <!-- Monitor preview graphic -->
+        <div class="flex justify-center">
+          <div class="w-40 h-28 bg-[#dfdfdf] win-outset p-2 flex flex-col items-center justify-center">
+            <div id="wallpaperMiniMonitor" class="w-full h-full win-inset wp-teal flex items-center justify-center text-[10px] text-white">
+              Preview
+            </div>
+            <div class="w-8 h-2 bg-[#808080] mt-1"></div>
+            <div class="w-16 h-1 bg-[#404040]"></div>
+          </div>
+        </div>
+
+        <fieldset class="win-inset p-2 bg-[#dfdfdf]">
+          <legend class="text-[11px] font-bold text-[#000080] px-1">Desktop Wallpaper:</legend>
+          <div class="grid grid-cols-2 gap-1.5 mt-1">
+            <button onclick="setWallpaper('wp-teal')" class="win-button text-[11px]">Classic 95 Teal</button>
+            <button onclick="setWallpaper('wp-clouds')" class="win-button text-[11px]">90s Clouds Bliss</button>
+            <button onclick="setWallpaper('wp-grid')" class="win-button text-[11px]">Cyberpunk Grid</button>
+            <button onclick="setWallpaper('wp-memphis')" class="win-button text-[11px]">Memphis 1993</button>
+            <button onclick="setWallpaper('wp-starfield')" class="win-button text-[11px]">Cosmic Starfield</button>
+            <button onclick="toggleCrtScanlines()" class="win-button text-[11px] text-purple-900 font-bold">Toggle CRT Scanlines</button>
+          </div>
+        </fieldset>
+
+        <div class="flex items-center gap-2">
+          <input type="text" id="customWpUrl" placeholder="Paste custom image URL..." class="win-inset px-2 py-1 text-xs flex-1 bg-white" />
+          <button onclick="setCustomWallpaper()" class="win-button text-xs font-bold">Apply</button>
+        </div>
+      </div>
+      <div class="win-inset bg-[#dfdfdf] px-2 py-1 flex justify-end gap-2">
+        <button onclick="closeApp('displayWindow')" class="win-button text-xs px-3">OK</button>
+        <button onclick="closeApp('displayWindow')" class="win-button text-xs px-3">Cancel</button>
+      </div>
+    </div>
+
+    <!-- 7. WINDOW: MS-DOS PROMPT -->
+    <div id="terminalWindow" class="retro-window win-outset absolute bg-[#c0c0c0] w-[95%] max-w-xl left-10 top-12 flex flex-col shadow-2xl hidden" style="z-index: 15;">
+      <div class="win-titlebar flex items-center justify-between px-2 py-1 cursor-move" onmousedown="startDrag(event, 'terminalWindow')">
+        <div class="flex items-center gap-1 font-bold text-xs">
+          <span>📟</span>
+          <span>MS-DOS Prompt - 80x25 Terminal</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <button class="win-button text-black text-xs w-4 h-4 font-bold" onclick="closeApp('terminalWindow')">×</button>
+        </div>
+      </div>
+      <div class="p-2 bg-black text-[#00ff66] font-mono text-xs h-72 overflow-y-auto" id="termOutput" onclick="document.getElementById('termInput').focus()">
+        <div>Microsoft(R) Windows 98 DOS Version 7.10</div>
+        <div>(C)Copyright Microsoft Corp 1981-1998. All rights reserved.</div>
+        <div class="text-yellow-400 mt-1">Type 'help' or 'dir' to list available portfolio commands.</div>
+        <br>
+      </div>
+      <div class="bg-black text-[#00ff66] font-mono text-xs px-2 pb-2 flex items-center">
+        <span>C:\USERS\ADMIN&gt;&nbsp;</span>
+        <input type="text" id="termInput" class="bg-transparent text-[#00ff66] border-none outline-none flex-1 font-mono text-xs" autocomplete="off" onkeydown="handleTerminalCommand(event)" />
+      </div>
+    </div>
+
+    <!-- 8. WINDOW: NOTEPAD -->
+    <div id="notepadWindow" class="retro-window win-outset absolute bg-[#c0c0c0] w-[90%] max-w-lg left-14 top-28 flex flex-col shadow-2xl hidden" style="z-index: 16;">
+      <div class="win-titlebar flex items-center justify-between px-2 py-1 cursor-move" onmousedown="startDrag(event, 'notepadWindow')">
+        <div class="flex items-center gap-1 font-bold text-xs truncate">
+          <span>📝</span>
+          <span id="notepadTitle">Notepad - Untitled</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <button class="win-button text-black text-xs w-4 h-4 font-bold" onclick="closeApp('notepadWindow')">×</button>
+        </div>
+      </div>
+      <div class="bg-[#c0c0c0] border-b border-[#808080] px-2 py-0.5 text-xs flex gap-3 text-black">
+        <span class="hover:bg-[#000080] hover:text-white px-1 cursor-pointer" onclick="saveNotepadFile()"><u>S</u>ave to Desktop</span>
+        <span class="hover:bg-[#000080] hover:text-white px-1 cursor-pointer" onclick="clearNotepad()"><u>N</u>ew</span>
+        <span class="hover:bg-[#000080] hover:text-white px-1 cursor-pointer" onclick="downloadCurrentNotepadFile()"><u>D</u>ownload</span>
+        <span class="hover:bg-[#000080] hover:text-white px-1 cursor-pointer" onclick="alertSystem('Notepad 98 with persistent IndexedDB sync.')"><u>A</u>bout</span>
+      </div>
+      <textarea id="notepadText" class="w-full h-56 win-inset p-2 bg-white text-black font-mono text-xs outline-none resize-none" placeholder="Type your ideas, notes, or scratch code here..."></textarea>
+      <div class="win-inset bg-[#dfdfdf] px-2 py-0.5 text-[10px] text-gray-700 flex justify-between">
+        <span id="notepadCharCount">0 characters</span>
+        <span id="notepadFileStatus">Draft Mode</span>
+      </div>
+    </div>
+
+    <!-- 9. WINDOW: PICTURE VIEWER 98 (For Image Files) -->
+    <div id="imageViewerWindow" class="retro-window win-outset absolute bg-[#c0c0c0] w-[90%] max-w-md left-20 top-20 flex flex-col shadow-2xl hidden" style="z-index: 17;">
+      <div class="win-titlebar flex items-center justify-between px-2 py-1 cursor-move" onmousedown="startDrag(event, 'imageViewerWindow')">
+        <div class="flex items-center gap-1 font-bold text-xs truncate">
+          <span>🖼️</span>
+          <span id="imageViewerTitle">Imaging 98 - Viewer</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <button class="win-button text-black text-xs w-4 h-4 font-bold" onclick="closeApp('imageViewerWindow')">×</button>
+        </div>
+      </div>
+      <div class="bg-[#c0c0c0] border-b border-[#808080] px-2 py-0.5 text-xs flex gap-2 text-black">
+        <button class="win-button text-[10px] py-0 px-2" onclick="zoomImage(1.2)">Zoom +</button>
+        <button class="win-button text-[10px] py-0 px-2" onclick="zoomImage(0.8)">Zoom -</button>
+        <button class="win-button text-[10px] py-0 px-2" onclick="resetImageZoom()">Reset</button>
+        <button class="win-button text-[10px] py-0 px-2 font-bold" onclick="setAsWallpaperFromViewer()">Set as Wallpaper</button>
+      </div>
+      <div class="win-inset bg-black p-2 flex items-center justify-center overflow-auto max-h-72 min-h-[220px]">
+        <img id="imageViewerTarget" src="" class="max-w-full max-h-64 object-contain transition-transform duration-150" alt="Dropped Image" />
+      </div>
+      <div class="win-inset bg-[#dfdfdf] px-2 py-0.5 text-[10px] text-black flex justify-between">
+        <span id="imageViewerStats">0 x 0 px</span>
+        <span>Persisted in IndexedDB</span>
+      </div>
+    </div>
+
+    <!-- 10. WINDOW: MEDIA PLAYER 98 (For Audio Files) -->
+    <div id="mediaPlayerWindow" class="retro-window win-outset absolute bg-[#c0c0c0] w-80 left-28 top-28 flex flex-col shadow-2xl hidden" style="z-index: 18;">
+      <div class="win-titlebar flex items-center justify-between px-2 py-1 cursor-move" onmousedown="startDrag(event, 'mediaPlayerWindow')">
+        <div class="flex items-center gap-1 font-bold text-xs truncate">
+          <span>🎵</span>
+          <span id="mediaPlayerTitle">Media Player 98</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <button class="win-button text-black text-xs w-4 h-4 font-bold" onclick="closeApp('mediaPlayerWindow')">×</button>
+        </div>
+      </div>
+      <div class="p-3 bg-[#c0c0c0] flex flex-col gap-2 font-mono text-xs">
+        <div class="win-inset bg-black p-2 flex flex-col items-center justify-center h-20 text-[#00ff66]">
+          <div id="mediaTrackName" class="text-xs truncate w-full text-center mb-1">Track: None</div>
+          <div class="flex gap-1 items-end h-8 w-44 justify-center" id="retroAudioBars">
+            <div class="w-2 bg-[#00ff66] h-3"></div>
+            <div class="w-2 bg-[#00ff66] h-6"></div>
+            <div class="w-2 bg-[#00ff66] h-4"></div>
+            <div class="w-2 bg-[#00ff66] h-7"></div>
+            <div class="w-2 bg-[#00ff66] h-2"></div>
+            <div class="w-2 bg-[#00ff66] h-5"></div>
+          </div>
+        </div>
+        <audio id="desktopAudioPlayer" controls class="w-full mt-1"></audio>
+      </div>
+    </div>
+
+  </div> <!-- END DESKTOP -->
+
+  <!-- ================= 90s DESKTOP RIGHT-CLICK CONTEXT MENU ================= -->
+  <div id="desktopContextMenu" class="win-outset absolute bg-[#c0c0c0] py-1 px-0.5 w-48 shadow-2xl z-50 font-mono text-xs hidden text-black" onclick="event.stopPropagation()">
+    <div onclick="createNewTextDocOnDesktop(); closeContextMenu();" class="flex items-center gap-2 px-3 py-1 hover:bg-[#000080] hover:text-white cursor-pointer">
+      <span>📄</span><span>New Text Document</span>
+    </div>
+    <div onclick="triggerDesktopUpload(); closeContextMenu();" class="flex items-center gap-2 px-3 py-1 hover:bg-[#000080] hover:text-white cursor-pointer">
+      <span>📥</span><span>Import File...</span>
+    </div>
+    <hr class="border-t border-[#808080] my-1">
+    <div onclick="rearrangeDesktopIcons(); closeContextMenu();" class="flex items-center gap-2 px-3 py-1 hover:bg-[#000080] hover:text-white cursor-pointer">
+      <span>📐</span><span>Arrange Icons</span>
+    </div>
+    <div onclick="openApp('displayWindow'); closeContextMenu();" class="flex items-center gap-2 px-3 py-1 hover:bg-[#000080] hover:text-white cursor-pointer">
+      <span>🖥️</span><span>Properties</span>
+    </div>
+  </div>
+
+  <!-- ICON CONTEXT MENU -->
+  <div id="iconContextMenu" class="win-outset absolute bg-[#c0c0c0] py-1 px-0.5 w-44 shadow-2xl z-50 font-mono text-xs hidden text-black" onclick="event.stopPropagation()">
+    <div id="iconCtxOpen" class="flex items-center gap-2 px-3 py-1 hover:bg-[#000080] hover:text-white cursor-pointer font-bold">
+      <span>⚡</span><span>Open</span>
+    </div>
+    <div id="iconCtxRename" class="flex items-center gap-2 px-3 py-1 hover:bg-[#000080] hover:text-white cursor-pointer">
+      <span>✏️</span><span>Rename</span>
+    </div>
+    <div id="iconCtxDownload" class="flex items-center gap-2 px-3 py-1 hover:bg-[#000080] hover:text-white cursor-pointer">
+      <span>💾</span><span>Download</span>
+    </div>
+    <hr class="border-t border-[#808080] my-1">
+    <div id="iconCtxDelete" class="flex items-center gap-2 px-3 py-1 hover:bg-[#000080] hover:text-white cursor-pointer text-red-900 font-bold">
+      <span>🗑️</span><span>Delete File</span>
+    </div>
+  </div>
+
+  <!-- ================= START MENU ================= -->
+  <div id="startMenu" class="win-outset absolute bottom-10 left-1 w-56 bg-[#c0c0c0] p-1 flex shadow-2xl z-50 hidden">
+    <!-- Blue Vertical Strip -->
+    <div class="bg-gradient-to-t from-[#000080] to-[#1084d0] w-7 flex items-end justify-center pb-3 text-white font-bold text-xs tracking-widest" style="writing-mode: vertical-rl; transform: rotate(180deg);">
+      RETRO 98
+    </div>
+    <!-- Menu Items -->
+    <div class="flex-1 pl-1 flex flex-col gap-0.5 text-xs font-mono text-black">
+      <div onclick="openApp('aboutWindow'); closeStartMenu();" class="flex items-center gap-2 p-1.5 hover:bg-[#000080] hover:text-white cursor-pointer">
+        <span>👤</span><span>About Developer</span>
+      </div>
+      <div onclick="openApp('projectsWindow'); closeStartMenu();" class="flex items-center gap-2 p-1.5 hover:bg-[#000080] hover:text-white cursor-pointer">
+        <span>💼</span><span>Portfolio Projects</span>
+      </div>
+      <div onclick="openApp('cabinetWindow'); closeStartMenu();" class="flex items-center gap-2 p-1.5 hover:bg-[#000080] hover:text-white cursor-pointer">
+        <span>🗄️</span><span>File Storage</span>
+      </div>
+      <div onclick="openApp('calcWindow'); closeStartMenu();" class="flex items-center gap-2 p-1.5 hover:bg-[#000080] hover:text-white cursor-pointer">
+        <span>🧮</span><span>Calculator</span>
+      </div>
+      <div onclick="openApp('terminalWindow'); closeStartMenu();" class="flex items-center gap-2 p-1.5 hover:bg-[#000080] hover:text-white cursor-pointer">
+        <span>📟</span><span>MS-DOS Prompt</span>
+      </div>
+      <div onclick="openApp('displayWindow'); closeStartMenu();" class="flex items-center gap-2 p-1.5 hover:bg-[#000080] hover:text-white cursor-pointer">
+        <span>🖥️</span><span>Display Settings</span>
+      </div>
+      <div onclick="openApp('notepadWindow'); closeStartMenu();" class="flex items-center gap-2 p-1.5 hover:bg-[#000080] hover:text-white cursor-pointer">
+        <span>📝</span><span>Notepad</span>
+      </div>
+      <hr class="border-t border-[#808080] my-1">
+      <div onclick="restartSystem()" class="flex items-center gap-2 p-1.5 hover:bg-[#000080] hover:text-white cursor-pointer text-red-900 font-bold">
+        <span>🔴</span><span>Shut Down System...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= RETRO TASKBAR ================= -->
+  <div class="win-outset bg-[#c0c0c0] w-full p-1 flex items-center justify-between z-40 select-none">
+    
+    <!-- Left: Start Button & Open Tasks -->
+    <div class="flex items-center gap-1.5 overflow-x-auto flex-1 mr-2">
+      <button id="startBtn" onclick="toggleStartMenu()" class="win-button px-2 py-0.5 font-bold text-xs flex items-center gap-1.5 bg-[#c0c0c0]">
+        <span class="text-sm">🪟</span>
+        <span class="font-extrabold tracking-wide">Start</span>
+      </button>
+
+      <div class="h-5 w-[2px] bg-gray-500 border-r border-white"></div>
+
+      <!-- Active Taskbar Buttons Container -->
+      <div id="taskbarTabs" class="flex items-center gap-1">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- Right: System Tray -->
+    <div class="win-inset px-2 py-0.5 flex items-center gap-2 text-xs font-mono bg-[#dfdfdf] shrink-0">
+      <span class="text-[10px] text-green-800 font-bold hidden sm:inline" title="Browser Storage Active">💾 IndexedDB</span>
+      <span id="soundToggleBtn" onclick="toggleAudio()" class="cursor-pointer" title="Toggle 90s Sound Effects">🔊</span>
+      <span onclick="toggleCrtScanlines()" class="cursor-pointer" title="Toggle CRT Filter">📺</span>
+      <span id="trayClock">12:00 PM</span>
+    </div>
+  </div>
+
+  <!-- SYSTEM ALERT MODAL -->
+  <div id="sysAlertModal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+    <div class="win-outset bg-[#c0c0c0] w-full max-w-xs p-1 shadow-2xl">
+      <div class="win-titlebar text-white px-2 py-1 flex items-center justify-between font-bold text-xs">
+        <span id="sysAlertTitle">System Message</span>
+        <button onclick="document.getElementById('sysAlertModal').classList.add('hidden')" class="win-button text-black w-4 h-4 text-xs font-bold">×</button>
+      </div>
+      <div class="p-3 text-xs text-black font-mono flex items-center gap-3">
+        <span class="text-3xl" id="sysAlertIcon">⚠️</span>
+        <div id="sysAlertText">System alert text</div>
+      </div>
+      <div class="text-center pb-2">
+        <button onclick="document.getElementById('sysAlertModal').classList.add('hidden')" class="win-button px-4 py-1 text-xs font-bold">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT SYSTEM ENGINE ================= -->
+  <script>
+    // System State & Persistence
+    let highestZ = 30;
+    let audioEnabled = true;
+    let crtEnabled = false;
+    let audioCtx = null;
+    let currentEditingFileId = null;
+    let selectedIconTarget = null;
+    let currentImageScale = 1;
+
+    let virtualFiles = [
+      { name: "Readme.txt", size: "1.2 KB", type: "text/plain", content: "Welcome to RetroOS 98.\nDouble-click any project to explore its interactive sub-world!\nDrop your files to test storage." }
+    ];
+
+    // ================= INDEXED-DB PERSISTENCE LAYER =================
+    const DB_NAME = "RetroOS98_DB";
+    const DB_VERSION = 1;
+    const STORE_FILES = "desktop_files";
+    const STORE_SETTINGS = "system_settings";
+    let dbInstance = null;
+
+    function initDatabase() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_FILES)) {
+            db.createObjectStore(STORE_FILES, { keyPath: "id" });
+          }
+          if (!db.objectStoreNames.contains(STORE_SETTINGS)) {
+            db.createObjectStore(STORE_SETTINGS, { keyPath: "key" });
+          }
+        };
+        req.onsuccess = (e) => {
+          dbInstance = e.target.result;
+          resolve(dbInstance);
+        };
+        req.onerror = (e) => {
+          console.error("IndexedDB error:", e);
+          reject(e);
+        };
+      });
+    }
+
+    async function dbSaveFile(fileObj) {
+      if (!dbInstance) await initDatabase();
+      return new Promise((resolve, reject) => {
+        const tx = dbInstance.transaction(STORE_FILES, "readwrite");
+        const store = tx.objectStore(STORE_FILES);
+        store.put(fileObj);
+        tx.oncomplete = () => resolve(fileObj);
+        tx.onerror = (e) => reject(e);
+      });
+    }
+
+    async function dbGetAllFiles() {
+      if (!dbInstance) await initDatabase();
+      return new Promise((resolve, reject) => {
+        const tx = dbInstance.transaction(STORE_FILES, "readonly");
+        const store = tx.objectStore(STORE_FILES);
+        const req = store.getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = (e) => reject(e);
+      });
+    }
+
+    async function dbDeleteFile(id) {
+      if (!dbInstance) await initDatabase();
+      return new Promise((resolve, reject) => {
+        const tx = dbInstance.transaction(STORE_FILES, "readwrite");
+        const store = tx.objectStore(STORE_FILES);
+        store.delete(id);
+        tx.oncomplete = () => resolve();
+        tx.onerror = (e) => reject(e);
+      });
+    }
+
+    async function dbSaveSetting(key, value) {
+      if (!dbInstance) await initDatabase();
+      const tx = dbInstance.transaction(STORE_SETTINGS, "readwrite");
+      tx.objectStore(STORE_SETTINGS).put({ key, value });
+    }
+
+    async function dbGetSetting(key) {
+      if (!dbInstance) await initDatabase();
+      return new Promise((resolve) => {
+        const tx = dbInstance.transaction(STORE_SETTINGS, "readonly");
+        const req = tx.objectStore(STORE_SETTINGS).get(key);
+        req.onsuccess = () => resolve(req.result ? req.result.value : null);
+        req.onerror = () => resolve(null);
+      });
+    }
+
+    // Sound Synthesizer via Web Audio API
+    function getAudioCtx() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      return audioCtx;
+    }
+
+    function beep(freq = 600, duration = 50, type = "square") {
+      if (!audioEnabled) return;
+      try {
+        const ctx = getAudioCtx();
+        if (ctx.state === 'suspended') ctx.resume();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration / 1000);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration / 1000);
+      } catch (e) {}
+    }
+
+    function toggleAudio() {
+      audioEnabled = !audioEnabled;
+      const btn = document.getElementById("soundToggleBtn");
+      btn.textContent = audioEnabled ? "🔊" : "🔇";
+      if (audioEnabled) beep(700, 60);
+    }
+
+    function toggleCrtScanlines() {
+      crtEnabled = !crtEnabled;
+      if (crtEnabled) {
+        document.body.classList.add("crt-overlay");
+      } else {
+        document.body.classList.remove("crt-overlay");
+      }
+      beep(880, 40);
+    }
+
+    // Live Digital Clock
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+      const str = `${hours}:${minutes} ${ampm}`;
+      document.getElementById("trayClock").textContent = str;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Start Menu Toggle
+    function toggleStartMenu() {
+      beep(500, 30);
+      const menu = document.getElementById("startMenu");
+      const btn = document.getElementById("startBtn");
+      const isHidden = menu.classList.contains("hidden");
+      if (isHidden) {
+        menu.classList.remove("hidden");
+        btn.classList.add("active");
+      } else {
+        closeStartMenu();
+      }
+    }
+
+    function closeStartMenu() {
+      document.getElementById("startMenu").classList.add("hidden");
+      document.getElementById("startBtn").classList.remove("active");
+    }
+
+    function onDesktopClick(e) {
+      closeContextMenu();
+      if (!e.target.closest('#startMenu') && !e.target.closest('#startBtn')) {
+        closeStartMenu();
+      }
+    }
+
+    // Modal Helper (no window.alert)
+    function alertSystem(msg, title = "System Notification", icon = "ℹ️") {
+      beep(400, 100);
+      document.getElementById("sysAlertTitle").textContent = title;
+      document.getElementById("sysAlertText").textContent = msg;
+      document.getElementById("sysAlertIcon").textContent = icon;
+      document.getElementById("sysAlertModal").classList.remove("hidden");
+    }
+
+    // ================= DIRECT DESKTOP DRAG & DROP =================
+    function onDesktopDragOver(e) {
+      e.preventDefault();
+      document.getElementById("desktopDropZoneGuide").classList.remove("hidden");
+    }
+
+    function onDesktopDragLeave(e) {
+      if (e.relatedTarget === null || e.clientX <= 0 || e.clientY <= 0) {
+        document.getElementById("desktopDropZoneGuide").classList.add("hidden");
+      }
+    }
+
+    function onDesktopDrop(e) {
+      e.preventDefault();
+      document.getElementById("desktopDropZoneGuide").classList.add("hidden");
+      if (e.dataTransfer && e.dataTransfer.files.length > 0) {
+        handleDirectDesktopFiles(e.dataTransfer.files);
+      }
+    }
+
+    function triggerDesktopUpload() {
+      document.getElementById("desktopHiddenFileInput").click();
+    }
+
+    async function handleDirectDesktopFiles(files) {
+      beep(850, 50);
+      for (const file of Array.from(files)) {
+        await processAndMountFile(file);
+      }
+      beep(1000, 40);
+    }
+
+    function getFileIconAndCategory(filename, mimeType) {
+      const ext = filename.split('.').pop().toLowerCase();
+      if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'].includes(ext) || mimeType.startsWith('image/')) {
+        return { icon: "🖼️", cat: "image" };
+      }
+      if (['mp3', 'wav', 'ogg', 'm4a'].includes(ext) || mimeType.startsWith('audio/')) {
+        return { icon: "🎵", cat: "audio" };
+      }
+      if (['csv', 'tsv'].includes(ext)) {
+        return { icon: "📊", cat: "data" };
+      }
+      if (['py'].includes(ext)) {
+        return { icon: "🐍", cat: "python" };
+      }
+      if (['js', 'ts', 'jsx', 'tsx', 'html', 'css', 'json'].includes(ext)) {
+        return { icon: "📜", cat: "code" };
+      }
+      if (['txt', 'md', 'log', 'ini'].includes(ext)) {
+        return { icon: "📝", cat: "text" };
+      }
+      if (['pdf'].includes(ext)) {
+        return { icon: "📕", cat: "document" };
+      }
+      return { icon: "📁", cat: "binary" };
+    }
+
+    function readFileAsDataURL(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function readFileAsText(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.readAsText(file);
+      });
+    }
+
+    async function processAndMountFile(file) {
+      const { icon, cat } = getFileIconAndCategory(file.name, file.type);
+      let contentData = null;
+
+      if (cat === 'image' || cat === 'audio' || cat === 'binary' || cat === 'document') {
+        contentData = await readFileAsDataURL(file);
+      } else {
+        contentData = await readFileAsText(file);
+      }
+
+      const fileRecord = {
+        id: "file_" + Date.now() + "_" + Math.floor(Math.random() * 1000),
+        name: file.name,
+        size: `${(file.size / 1024).toFixed(1)} KB`,
+        rawSize: file.size,
+        type: file.type || "text/plain",
+        category: cat,
+        icon: icon,
+        content: contentData,
+        timestamp: Date.now()
+      };
+
+      await dbSaveFile(fileRecord);
+      renderUserDesktopIcons();
+      // Mirror to cabinet
+      virtualFiles.push(fileRecord);
+      renderVirtualFiles();
+    }
+
+    async function renderUserDesktopIcons() {
+      const files = await dbGetAllFiles();
+      const container = document.getElementById("userDesktopIcons");
+      container.innerHTML = "";
+
+      files.forEach(f => {
+        const iconDiv = document.createElement("div");
+        iconDiv.className = "desktop-icon flex flex-col items-center w-20 text-center cursor-pointer p-1 rounded hover:bg-blue-800/40 relative";
+        iconDiv.dataset.fileId = f.id;
+        iconDiv.innerHTML = `
+          <div class="text-3xl filter drop-shadow">${f.icon}</div>
+          <span class="text-xs text-white px-1 mt-1 font-mono tracking-wide leading-tight shadow-sm select-none break-all line-clamp-2">${escapeHtml(f.name)}</span>
+        `;
+        iconDiv.onclick = (e) => {
+          e.stopPropagation();
+          beep(600, 20);
+        };
+        iconDiv.ondblclick = (e) => {
+          e.stopPropagation();
+          openDesktopUserFile(f.id);
+        };
+        iconDiv.oncontextmenu = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          openIconContextMenu(e, f.id);
+        };
+        container.appendChild(iconDiv);
+      });
+    }
+
+    async function openDesktopUserFile(id) {
+      const files = await dbGetAllFiles();
+      const file = files.find(f => f.id === id);
+      if (!file) return;
+
+      beep(700, 40);
+
+      if (file.category === 'image') {
+        const win = document.getElementById("imageViewerWindow");
+        document.getElementById("imageViewerTitle").textContent = `Imaging 98 - ${file.name}`;
+        const img = document.getElementById("imageViewerTarget");
+        img.src = file.content;
+        currentImageScale = 1;
+        img.style.transform = `scale(1)`;
+        img.onload = () => {
+          document.getElementById("imageViewerStats").textContent = `${img.naturalWidth} x ${img.naturalHeight} px (${file.size})`;
+        };
+        win.dataset.currentFileUrl = file.content;
+        openApp("imageViewerWindow");
+      } 
+      else if (file.category === 'audio') {
+        const win = document.getElementById("mediaPlayerWindow");
+        document.getElementById("mediaPlayerTitle").textContent = `Media Player - ${file.name}`;
+        document.getElementById("mediaTrackName").textContent = `Track: ${file.name}`;
+        const player = document.getElementById("desktopAudioPlayer");
+        player.src = file.content;
+        openApp("mediaPlayerWindow");
+        player.play().catch(() => {});
+      }
+      else if (file.category === 'data') {
+        openProject('pandas95');
+        setTimeout(() => {
+          const con = document.getElementById("pandasDemoConsole");
+          if (con) {
+            con.innerHTML += `
+              <div class="text-yellow-300 mt-2">&gt; Loaded dropped file: '${file.name}'</div>
+              <div>Detected CSV/Data Matrix | Size: ${file.size}</div>
+              <div>Executing pd.read_csv() summary breakdown...</div>
+              <div class="text-white mt-1 win-inset bg-gray-900 p-1 text-[10px] max-h-24 overflow-auto">${escapeHtml(file.content.slice(0, 300))}...</div>
+            `;
+            con.scrollTop = con.scrollHeight;
+          }
+        }, 150);
+      }
+      else {
+        // Text, Code, Python, Markdown
+        currentEditingFileId = file.id;
+        document.getElementById("notepadTitle").textContent = `Notepad - ${file.name}`;
+        document.getElementById("notepadText").value = file.content || "";
+        document.getElementById("notepadCharCount").textContent = `${file.content.length} characters`;
+        document.getElementById("notepadFileStatus").textContent = `Editing: ${file.name}`;
+        openApp("notepadWindow");
+      }
+    }
+
+    // ================= CONTEXT MENUS (DESKTOP & ICONS) =================
+    function openDesktopContextMenu(e) {
+      if (e.target.closest('#desktopContextMenu') || e.target.closest('#iconContextMenu') || e.target.closest('.retro-window') || e.target.closest('#startMenu')) {
+        return;
+      }
+      e.preventDefault();
+      beep(600, 30);
+      closeContextMenu();
+
+      const menu = document.getElementById("desktopContextMenu");
+      const x = Math.min(window.innerWidth - 190, e.clientX);
+      const y = Math.min(window.innerHeight - 150, e.clientY);
+      menu.style.left = `${x}px`;
+      menu.style.top = `${y}px`;
+      menu.classList.remove("hidden");
+    }
+
+    function openIconContextMenu(e, fileId) {
+      closeContextMenu();
+      selectedIconTarget = fileId;
+      const menu = document.getElementById("iconContextMenu");
+      const x = Math.min(window.innerWidth - 180, e.clientX);
+      const y = Math.min(window.innerHeight - 150, e.clientY);
+      menu.style.left = `${x}px`;
+      menu.style.top = `${y}px`;
+      menu.classList.remove("hidden");
+
+      document.getElementById("iconCtxOpen").onclick = () => {
+        closeContextMenu();
+        openDesktopUserFile(fileId);
+      };
+      document.getElementById("iconCtxRename").onclick = () => {
+        closeContextMenu();
+        renameDesktopFile(fileId);
+      };
+      document.getElementById("iconCtxDownload").onclick = () => {
+        closeContextMenu();
+        downloadDesktopFile(fileId);
+      };
+      document.getElementById("iconCtxDelete").onclick = () => {
+        closeContextMenu();
+        deleteDesktopFile(fileId);
+      };
+    }
+
+    function closeContextMenu() {
+      document.getElementById("desktopContextMenu").classList.add("hidden");
+      document.getElementById("iconContextMenu").classList.add("hidden");
+    }
+
+    async function createNewTextDocOnDesktop() {
+      beep(700, 40);
+      const files = await dbGetAllFiles();
+      const num = files.length + 1;
+      const newFile = {
+        id: "file_" + Date.now(),
+        name: `New_Document_${num}.txt`,
+        size: "0.1 KB",
+        rawSize: 10,
+        type: "text/plain",
+        category: "text",
+        icon: "📝",
+        content: "New Text Document Created on Desktop.\nType here and click Save!",
+        timestamp: Date.now()
+      };
+      await dbSaveFile(newFile);
+      renderUserDesktopIcons();
+      openDesktopUserFile(newFile.id);
+    }
+
+    async function renameDesktopFile(id) {
+      const files = await dbGetAllFiles();
+      const file = files.find(f => f.id === id);
+      if (!file) return;
+
+      const newName = prompt("Enter new filename:", file.name);
+      if (newName && newName.trim() !== "") {
+        file.name = newName.trim();
+        const info = getFileIconAndCategory(file.name, file.type);
+        file.icon = info.icon;
+        file.category = info.cat;
+        await dbSaveFile(file);
+        renderUserDesktopIcons();
+        beep(750, 40);
+      }
+    }
+
+    async function downloadDesktopFile(id) {
+      const files = await dbGetAllFiles();
+      const file = files.find(f => f.id === id);
+      if (!file) return;
+
+      beep(600, 40);
+      const a = document.createElement("a");
+      a.href = file.content.startsWith('data:') ? file.content : 'data:text/plain;charset=utf-8,' + encodeURIComponent(file.content);
+      a.download = file.name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    async function deleteDesktopFile(id) {
+      beep(300, 100);
+      await dbDeleteFile(id);
+      renderUserDesktopIcons();
+      alertSystem("File permanently deleted from desktop virtual disk.", "Recycle Bin", "🗑️");
+    }
+
+    function rearrangeDesktopIcons() {
+      beep(650, 40);
+      renderUserDesktopIcons();
+    }
+
+    // Image Viewer tools
+    function zoomImage(factor) {
+      currentImageScale *= factor;
+      const img = document.getElementById("imageViewerTarget");
+      img.style.transform = `scale(${currentImageScale})`;
+    }
+
+    function resetImageZoom() {
+      currentImageScale = 1;
+      document.getElementById("imageViewerTarget").style.transform = `scale(1)`;
+    }
+
+    function setAsWallpaperFromViewer() {
+      const win = document.getElementById("imageViewerWindow");
+      const url = win.dataset.currentFileUrl;
+      if (url) {
+        setCustomWallpaperDirect(url);
+        alertSystem("Desktop wallpaper updated with current image!", "Display", "🖥️");
+      }
+    }
+
+    // ================= NOTEPAD LOGIC (UPDATED WITH IDB SYNC) =================
+    const notepadEl = document.getElementById("notepadText");
+    notepadEl.addEventListener("input", () => {
+      document.getElementById("notepadCharCount").textContent = `${notepadEl.value.length} characters`;
+    });
+
+    function clearNotepad() {
+      beep(450, 30);
+      currentEditingFileId = null;
+      notepadEl.value = "";
+      document.getElementById("notepadTitle").textContent = "Notepad - Untitled";
+      document.getElementById("notepadCharCount").textContent = "0 characters";
+      document.getElementById("notepadFileStatus").textContent = "Draft Mode";
+    }
+
+    async function saveNotepadFile() {
+      beep(700, 40);
+      const text = notepadEl.value;
+
+      if (currentEditingFileId) {
+        const files = await dbGetAllFiles();
+        const file = files.find(f => f.id === currentEditingFileId);
+        if (file) {
+          file.content = text;
+          file.size = `${(text.length / 1024).toFixed(1)} KB`;
+          await dbSaveFile(file);
+          renderUserDesktopIcons();
+          alertSystem(`Saved updates to '${file.name}' on Desktop!`, "Notepad Save", "💾");
+          return;
+        }
+      }
+
+      // New file
+      const fileName = `Note_${Date.now().toString().slice(-4)}.txt`;
+      const newFile = {
+        id: "file_" + Date.now(),
+        name: fileName,
+        size: `${(text.length / 1024).toFixed(1)} KB`,
+        rawSize: text.length,
+        type: "text/plain",
+        category: "text",
+        icon: "📝",
+        content: text,
+        timestamp: Date.now()
+      };
+
+      currentEditingFileId = newFile.id;
+      document.getElementById("notepadTitle").textContent = `Notepad - ${fileName}`;
+      document.getElementById("notepadFileStatus").textContent = `Editing: ${fileName}`;
+      await dbSaveFile(newFile);
+      renderUserDesktopIcons();
+      alertSystem(`Saved '${fileName}' to Desktop & IndexedDB storage!`, "Notepad Save", "💾");
+    }
+
+    function downloadCurrentNotepadFile() {
+      beep(600, 40);
+      const text = notepadEl.value;
+      const title = document.getElementById("notepadTitle").textContent.replace("Notepad - ", "").trim() || "document.txt";
+      const a = document.createElement("a");
+      a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+      a.download = title.endsWith(".txt") ? title : `${title}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // ================= DISPLAY PROPERTIES & WALLPAPERS (PERSISTENT) =================
+    async function setWallpaper(className) {
+      beep(650, 30);
+      const b = document.getElementById("desktopBody");
+      b.style.backgroundImage = "";
+      b.className = `min-h-screen relative flex flex-col justify-between ${className} ${crtEnabled ? 'crt-overlay' : ''}`;
+      document.getElementById("wallpaperMiniMonitor").className = `w-full h-full win-inset ${className} flex items-center justify-center text-[10px] text-white`;
+      await dbSaveSetting("wallpaper_class", className);
+      await dbSaveSetting("wallpaper_custom_url", null);
+    }
+
+    async function setCustomWallpaper() {
+      const url = document.getElementById("customWpUrl").value.trim();
+      if (!url) return;
+      setCustomWallpaperDirect(url);
+    }
+
+    async function setCustomWallpaperDirect(url) {
+      beep(650, 30);
+      const b = document.getElementById("desktopBody");
+      b.style.backgroundImage = `url('${url}')`;
+      b.style.backgroundSize = "cover";
+      b.style.backgroundPosition = "center";
+      await dbSaveSetting("wallpaper_custom_url", url);
+    }
+
+    // Guestbook persistence
+    async function loadGuestbook() {
+      const savedEntries = await dbGetSetting("guestbook_entries");
+      if (savedEntries && Array.isArray(savedEntries)) {
+        const list = document.getElementById("guestbookList");
+        list.innerHTML = "";
+        savedEntries.forEach(ent => {
+          const entry = document.createElement("div");
+          entry.innerHTML = `<b class="text-green-800">${escapeHtml(ent.name)}:</b> ${escapeHtml(ent.msg)}`;
+          list.appendChild(entry);
+        });
+      }
+    }
+
+    async function addGuestbookEntry() {
+      const nameInput = document.getElementById("guestName");
+      const msgInput = document.getElementById("guestMessage");
+      const name = nameInput.value.trim() || "Anonymous";
+      const msg = msgInput.value.trim();
+
+      if (!msg) {
+        alertSystem("Please enter a message to sign the guestbook!", "Notice");
+        return;
+      }
+      beep(800, 50);
+      const list = document.getElementById("guestbookList");
+      const entry = document.createElement("div");
+      entry.innerHTML = `<b class="text-green-800">${escapeHtml(name)}:</b> ${escapeHtml(msg)}`;
+      list.appendChild(entry);
+      list.scrollTop = list.scrollHeight;
+
+      // Save to IDB
+      let current = (await dbGetSetting("guestbook_entries")) || [
+        { name: "Morpheus", msg: "Welcome to the real world." },
+        { name: "Ada Lovelace", msg: "Great portfolio! Keep on compiling!" }
+      ];
+      current.push({ name, msg });
+      await dbSaveSetting("guestbook_entries", current);
+
+      nameInput.value = "";
+      msgInput.value = "";
+    }
+
+    // Initial boot & restore settings from IndexedDB
+    window.addEventListener('load', async () => {
+      updateTaskbar();
+      await initDatabase();
+      await renderUserDesktopIcons();
+      await loadGuestbook();
+
+      // Restore custom wallpaper
+      const customUrl = await dbGetSetting("wallpaper_custom_url");
+      if (customUrl) {
+        setCustomWallpaperDirect(customUrl);
+      } else {
+        const wpClass = await dbGetSetting("wallpaper_class");
+        if (wpClass) {
+          const b = document.getElementById("desktopBody");
+          b.className = `min-h-screen relative flex flex-col justify-between ${wpClass}`;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
